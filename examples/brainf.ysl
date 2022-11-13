@@ -2,9 +2,15 @@
 20 input
 30 var program f return
 
-# iterate through the program
-40 var i = 0
-50 size program
-60 var programLen f return
+## init cells
+40 var cells = 0
+50 set_size cells 30000
+60 var ptr = 0
 
-# check what operations need to be done
+# iterate through the program
+70 var i = 0
+80 size program
+90 var programLen f return
+
+# check what operation needs to be done
+100 

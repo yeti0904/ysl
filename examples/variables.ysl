@@ -1,0 +1,12 @@
+10 var mystr = "hello world\n"
+20 var i = 0
+30 size mystr
+40 var len f return
+
+50 var ch f mystr $i
+60 putch $ch
+70 var i + 1
+80 cmp $i $len
+90 goto_if 110
+100 goto 50
+110 exit

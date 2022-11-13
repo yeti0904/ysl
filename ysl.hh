@@ -58,7 +58,7 @@ namespace YSL {
 		    		}
 		    		continue;
 		    	}
-		    	if (str[i] == '"') {
+		    	if ((str[i] == '"') && ((maxSplit < 0) || (splits < maxSplit - 1))) {
 		    		inString = !inString;
 		    		continue;
 		    	}
@@ -153,6 +153,16 @@ namespace YSL {
 
 						ret.push_back(std::to_string(variables[arg.substr(1)][0]));
 					}
+					else if (arg[0] == '!') {
+						std::string value;
+						for (auto& ch : variables[arg.substr(1)]) {
+							value += ch;
+						}
+						ret.push_back(value);
+					}
+					else if (arg[0] == '&') {
+						ret.push_back(std::to_string((int) arg[1]));
+					}
 					else {
 						ret.push_back(arg);
 					}
@@ -187,7 +197,14 @@ namespace YSL {
 						std::vector <std::string> (parts.begin() + 1, parts.end())
 					);
 
-					auto ret = builtins[parts[0]](args, *this);
+					std::vector <int> ret;
+					try {
+						ret = builtins[parts[0]](args, *this);
+					}
+					catch (...) {
+						fprintf(stderr, "Crashed at line %i\n", (int) lineAt->first);
+						exit(1);
+					}
 					if (!ret.empty()) {
 						returnValues.push_back(ret);
 					}
@@ -284,11 +301,20 @@ namespace YSL {
 
 			switch (args[1][0]) {
 				case '=': {
-					std::vector <int> value;
-					for (size_t i = 2; i < args.size(); ++i) {
-						value.push_back(stoi(args[i]));
+					if (Util::IsInteger(args[2])) {
+						std::vector <int> value;
+						for (size_t i = 2; i < args.size(); ++i) {
+							value.push_back(stoi(args[i]));
+						}
+						env.variables[args[0]] = value;
 					}
-					env.variables[args[0]] = value;
+					else {
+						std::vector <int> value;
+						for (auto& ch : args[2]) {
+							value.push_back(ch);
+						}
+						env.variables[args[0]] = value;
+					}
 					break;
 				}
 				case '+': {

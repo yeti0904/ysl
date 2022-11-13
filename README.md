@@ -28,6 +28,17 @@ variables:
 print $myvar
 ```
 
+string literals from variables
+```
+print !myvar
+```
+
+character to integer
+```
+print &A
+# prints 65
+```
+
 ## builtins
 
 ### print
