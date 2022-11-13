@@ -7,6 +7,7 @@
 #include <chrono>
 #include <thread>
 #include <fstream>
+#include <iostream>
 
 namespace YSL {
 	namespace Util {
@@ -100,6 +101,9 @@ namespace YSL {
 		std::vector <int> Var(std::vector <std::string>,     Environment&);
 		std::vector <int> Load(std::vector <std::string>,    Environment&);
 		std::vector <int> Size(std::vector <std::string>,    Environment&);
+		std::vector <int> Getch(std::vector <std::string>,   Environment&);
+		std::vector <int> Input(std::vector <std::string>,   Environment&);
+		std::vector <int> Putch(std::vector <std::string>,   Environment&);
 	}
 
 	class Environment {
@@ -126,6 +130,9 @@ namespace YSL {
 				builtins["var"]     = STD::Var;
 				builtins["load"]    = STD::Load;
 				builtins["size"]    = STD::Size;
+				builtins["getch"]   = STD::Getch;
+				builtins["input"]   = STD::Input;
+				builtins["putch"]   = STD::Putch;
 			}
 
 			void ExitError() {
@@ -378,6 +385,29 @@ namespace YSL {
 			}
 
 			return {(int) env.variables[args[0]].size()};
+		}
+		std::vector <int> Getch(std::vector <std::string>, Environment&) {
+			return {getchar()};
+		}
+		std::vector <int> Input(std::vector <std::string>, Environment&) {
+			std::string input;
+			std::getline(std::cin, input, '\n');
+
+			std::vector <int> ret;
+			for (auto& ch : input) {
+				ret.push_back(ch);
+			}
+
+			return ret;
+		}
+		std::vector <int> Putch(std::vector <std::string> args, Environment& env) {
+			if (args.empty()) {
+				fprintf(stderr, "Putch: needs at least 1 argument\n");
+				env.ExitError();
+			}
+
+			putchar(stoi(args[0]));
+			return {};
 		}
 	}
 }

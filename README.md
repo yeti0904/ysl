@@ -93,3 +93,12 @@ loads the contents of a file into program memory, takes 1 argument which is file
 
 ## size
 returns the size of an array
+
+## getch
+gets 1 character from stdin and returns it, no parameters
+
+## input
+gets a line from stdin and returns it, no parameters
+
+## putch
+takes in an integer argument and prints out the ASCII character of that integer
