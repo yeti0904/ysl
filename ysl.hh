@@ -6,6 +6,7 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <fstream>
 
 namespace YSL {
 	namespace Util {
@@ -97,6 +98,8 @@ namespace YSL {
 		std::vector <int> Wait(std::vector <std::string>,    Environment&);
 		std::vector <int> Cmp(std::vector <std::string>,     Environment&);
 		std::vector <int> Var(std::vector <std::string>,     Environment&);
+		std::vector <int> Load(std::vector <std::string>,    Environment&);
+		std::vector <int> Size(std::vector <std::string>,    Environment&);
 	}
 
 	class Environment {
@@ -121,6 +124,8 @@ namespace YSL {
 				builtins["wait"]    = STD::Wait;
 				builtins["cmp"]     = STD::Cmp;
 				builtins["var"]     = STD::Var;
+				builtins["load"]    = STD::Load;
+				builtins["size"]    = STD::Size;
 			}
 
 			std::vector <std::string> AddVariables(std::vector <std::string> args) {
@@ -252,7 +257,10 @@ namespace YSL {
 				exit(1);
 			}
 
-			if (env.variables[args[0]].empty() && (args[1] != "=")) {
+			if (
+				env.variables[args[0]].empty() &&
+				(args[1] != "=") && (args[1] != "f")
+			) {
 				fprintf(stderr, "Var: no such variable %s\n", args[0].c_str());
 				exit(1);
 			}
@@ -286,6 +294,50 @@ namespace YSL {
 					env.variables[args[0]][0] %= stoi(args[2]);
 					break;
 				}
+				case 'f': {
+					if (args.size() < 4) {
+						fprintf(stderr, "Var: from operator needs 5 arguments\n");
+						exit(1);
+					}
+
+					if (env.variables[args[2]].empty()) {
+						fprintf(stderr, "Var: no such variable %s\n", args[2].c_str());
+						exit(1);
+					}
+					auto arr = env.variables[args[2]];
+					auto val = args[2] == "return"?
+						env.returnValues.back() :
+						std::vector <int> {env.variables[args[2]][stol(args[3])]};
+
+					if ((size_t) stoi(args[3]) >= arr.size()) {
+						fprintf(
+							stderr,
+							"Var: out of range for index %i of array of size %i\n",
+							stoi(args[3]), (int) arr.size()
+						);
+						exit(1);
+					}
+
+					env.variables[args[0]] = val;
+					break;
+				}
+				case 'a': {
+					env.variables[args[0]].push_back(stoi(args[2]));
+					break;
+				}
+				case 'r': {
+					if (args.size() < 4) {
+						fprintf(stderr, "remove operator needs 4 arguments\n");
+						exit(1);
+					}
+				
+					auto& arr = env.variables[args[0]];
+					arr.erase(
+						arr.begin() + stoi(args[2]),
+						arr.begin() + stoi(args[2]) + stoi(args[3])
+					);
+					break;
+				}
 				default: {
 					fprintf(stderr, "Var: unknown operation %c\n", args[1][0]);
 					exit(1);
@@ -293,6 +345,31 @@ namespace YSL {
 			}
 
 			return {};
+		}
+		std::vector <int> Load(std::vector <std::string> args, Environment& env) {
+			if (args.empty()) {
+				fprintf(stderr, "Load: needs at least 1 argument\n");
+				exit(1);
+			}
+
+			env.program.clear();
+			std::ifstream             fhnd(args[0]);
+			std::string               line;
+
+			while (getline(fhnd, line)) {
+				env.Interpret(line);
+			}
+			fhnd.close();
+			puts("Loaded program");
+			return {};
+		}
+		std::vector <int> Size(std::vector <std::string> args, Environment& env) {
+			if (args.empty()) {
+				fprintf(stderr, "Size: needs at least 1 argument\n");
+				exit(1);
+			}
+
+			return {(int) env.variables[args[0]].size()};
 		}
 	}
 }

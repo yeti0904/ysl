@@ -3,16 +3,11 @@
 #include "ysl.hh"
 
 int main(int argc, char** argv) {
-	YSL::Environment          env;
+	YSL::Environment env;
 
 	if (argc > 1) {
-		std::ifstream             fhnd(argv[1]);
-		std::string               line;
-
-		while (getline(fhnd, line)) {
-			env.Interpret(line);
-		}
-		fhnd.close();
+		env.Interpret(std::string("load ") + argv[1]);
+		env.Interpret("run");
 	}
 	else {
 		while (true) {
