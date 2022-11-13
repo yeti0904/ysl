@@ -1,0 +1,27 @@
+filetype: ysl
+
+detect:
+    filename: "\\.(ysl)$"
+
+rules:
+    - statement: "\\b(print|println|exit|run|goto|goto_if|wait|cmp|var|load|size)\\b"
+    - identifier: "\\$\\{?[0-9A-Za-z_!@#$*?-]+\\}?"
+    - identifier: "\\$\\{?[0-9A-Za-z_!@#$*?-]+\\}?"
+    
+    - constant.string:
+        start: "\""
+        end: "\""
+        skip: "\\\\."
+        rules:
+            - constant.specialChar: "\\\\([\"'abfnrtv\\\\]|[0-3]?[0-7]{1,2}|x[0-9A-Fa-f]{1,2}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})"
+
+    - symbol.operator: "\\b(=|\\-|\\+|\\*|\\/|\\%)\\b"
+
+    - constant.number: "\\b([0-9.]*)\\b"
+    - constant.bool: "\\b(true|false)\\b"
+    
+    - comment:
+        start: "##"
+        end: "$"
+        rules:
+            - todo: "(TODO|XXX|FIXME):?"

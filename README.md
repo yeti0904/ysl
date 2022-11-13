@@ -71,6 +71,8 @@ var array = 1 2 3 4 5
 var element f array 0
 println $element
 ```
+if the last argument is not given then the first element is used
+
 if a variable `return` is used then it uses the return value of the last returning function
 
 the a operation appends 1 element to an array, like this:

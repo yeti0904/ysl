@@ -1,7 +1,0 @@
-10 var i = 1
-20 println $i
-30 cmp $i 5
-40 goto_if 70
-50 var i + 1
-60 goto 20
-70 exit

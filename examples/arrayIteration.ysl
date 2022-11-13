@@ -1,0 +1,11 @@
+10 var array = 1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192
+20 var i = 0
+30 size array
+40 var arraySize f return
+50 var it f array $i
+60 println $it
+70 var i + 1
+80 cmp $i $arraySize
+90 goto_if 110
+100 goto 50
+110 exit

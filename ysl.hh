@@ -128,6 +128,11 @@ namespace YSL {
 				builtins["size"]    = STD::Size;
 			}
 
+			void ExitError() {
+				fprintf(stderr, "Exited at line %i\n", (int) lineAt->first);
+				exit(1);
+			}
+
 			std::vector <std::string> AddVariables(std::vector <std::string> args) {
 				std::vector <std::string> ret;
 				for (auto& arg : args) {
@@ -172,8 +177,11 @@ namespace YSL {
 					auto args = AddVariables(
 						std::vector <std::string> (parts.begin() + 1, parts.end())
 					);
-					
-					returnValues.push_back(builtins[parts[0]](args, *this));
+
+					auto ret = builtins[parts[0]](args, *this);
+					if (!ret.empty()) {
+						returnValues.push_back(ret);
+					}
 				}
 			}
 	};
@@ -208,7 +216,7 @@ namespace YSL {
 		std::vector <int> Goto(std::vector <std::string> args, Environment& env) {
 			if (args.size() == 0) {
 				fprintf(stderr, "Goto: need at least 1 argument\n");
-				exit(1);
+				env.ExitError();
 			}
 
 			size_t to = stol(args[0]);
@@ -226,7 +234,7 @@ namespace YSL {
 		std::vector <int> GotoIf(std::vector <std::string> args, Environment& env) {
 			if (args.size() == 0) {
 				fprintf(stderr, "Goto_if: needs at least 1 argument\n");
-				exit(1);
+				env.ExitError();
 			}
 
 			if (!env.returnValues.empty() && (env.returnValues.back()[0] != 0)) {
@@ -234,19 +242,19 @@ namespace YSL {
 			}
 			return {};
 		}
-		std::vector <int> Wait(std::vector <std::string> args, Environment&) {
+		std::vector <int> Wait(std::vector <std::string> args, Environment& env) {
 			if (args.size() == 0) {
 				fprintf(stderr, "Wait: needs at least 1 argument\n");
-				exit(1);
+				env.ExitError();
 			}
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(stol(args[0])));
 			return {};
 		}
-		std::vector <int> Cmp(std::vector <std::string> args, Environment&) {
+		std::vector <int> Cmp(std::vector <std::string> args, Environment& env) {
 			if (args.size() < 2) {
 				fprintf(stderr, "Cmp: needs at least 2 arguments\n");
-				exit(1);
+				env.ExitError();
 			}
 
 			return {args[0] == args[1]? 1 : 0};
@@ -254,7 +262,7 @@ namespace YSL {
 		std::vector <int> Var(std::vector <std::string> args, Environment& env) {
 			if (args.size() < 3) {
 				fprintf(stderr, "Var: needs at least 3 arguments\n");
-				exit(1);
+				env.ExitError();
 			}
 
 			if (
@@ -262,7 +270,7 @@ namespace YSL {
 				(args[1] != "=") && (args[1] != "f")
 			) {
 				fprintf(stderr, "Var: no such variable %s\n", args[0].c_str());
-				exit(1);
+				env.ExitError();
 			}
 
 			switch (args[1][0]) {
@@ -295,30 +303,30 @@ namespace YSL {
 					break;
 				}
 				case 'f': {
-					if (args.size() < 4) {
-						fprintf(stderr, "Var: from operator needs 5 arguments\n");
-						exit(1);
+					if (args.size() < 3) {
+						fprintf(stderr, "Var: from operator needs 3 arguments\n");
+						env.ExitError();
 					}
 
-					if (env.variables[args[2]].empty()) {
+					if (env.variables[args[2]].empty() && (args[2] != "return")) {
 						fprintf(stderr, "Var: no such variable %s\n", args[2].c_str());
-						exit(1);
+						env.ExitError();
 					}
-					auto arr = env.variables[args[2]];
-					auto val = args[2] == "return"?
-						env.returnValues.back() :
-						std::vector <int> {env.variables[args[2]][stol(args[3])]};
+					size_t index = args.size() == 4? stol(args[3]) : 0;
+					auto   arr = args[2] == "return"?
+						std::vector <int> {env.returnValues.back()} :
+						env.variables[args[2]];
 
-					if ((size_t) stoi(args[3]) >= arr.size()) {
+					if (index >= arr.size()) {
 						fprintf(
 							stderr,
 							"Var: out of range for index %i of array of size %i\n",
-							stoi(args[3]), (int) arr.size()
+							(int) index, (int) arr.size()
 						);
-						exit(1);
+						env.ExitError();
 					}
 
-					env.variables[args[0]] = val;
+					env.variables[args[0]] = {arr[index]};
 					break;
 				}
 				case 'a': {
@@ -328,7 +336,7 @@ namespace YSL {
 				case 'r': {
 					if (args.size() < 4) {
 						fprintf(stderr, "remove operator needs 4 arguments\n");
-						exit(1);
+						env.ExitError();
 					}
 				
 					auto& arr = env.variables[args[0]];
@@ -340,7 +348,7 @@ namespace YSL {
 				}
 				default: {
 					fprintf(stderr, "Var: unknown operation %c\n", args[1][0]);
-					exit(1);
+					env.ExitError();
 				}
 			}
 
@@ -349,7 +357,7 @@ namespace YSL {
 		std::vector <int> Load(std::vector <std::string> args, Environment& env) {
 			if (args.empty()) {
 				fprintf(stderr, "Load: needs at least 1 argument\n");
-				exit(1);
+				env.ExitError();
 			}
 
 			env.program.clear();
@@ -366,7 +374,7 @@ namespace YSL {
 		std::vector <int> Size(std::vector <std::string> args, Environment& env) {
 			if (args.empty()) {
 				fprintf(stderr, "Size: needs at least 1 argument\n");
-				exit(1);
+				env.ExitError();
 			}
 
 			return {(int) env.variables[args[0]].size()};
