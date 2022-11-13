@@ -88,14 +88,15 @@ namespace YSL {
 	typedef std::vector <int> (*Function)(std::vector <std::string>, Environment&);
 
 	namespace STD {
-		std::vector <int> Print(std::vector <std::string>,  Environment&);
-		std::vector <int> Exit(std::vector <std::string>,   Environment&);
-		std::vector <int> Run(std::vector <std::string>,    Environment&);
-		std::vector <int> Goto(std::vector <std::string>,   Environment&);
-		std::vector <int> GotoIf(std::vector <std::string>, Environment&);
-		std::vector <int> Wait(std::vector <std::string>,   Environment&);
-		std::vector <int> Cmp(std::vector <std::string>,    Environment&);
-		std::vector <int> Var(std::vector <std::string>,    Environment&);
+		std::vector <int> Print(std::vector <std::string>,   Environment&);
+		std::vector <int> PrintLn(std::vector <std::string>, Environment&);
+		std::vector <int> Exit(std::vector <std::string>,    Environment&);
+		std::vector <int> Run(std::vector <std::string>,     Environment&);
+		std::vector <int> Goto(std::vector <std::string>,    Environment&);
+		std::vector <int> GotoIf(std::vector <std::string>,  Environment&);
+		std::vector <int> Wait(std::vector <std::string>,    Environment&);
+		std::vector <int> Cmp(std::vector <std::string>,     Environment&);
+		std::vector <int> Var(std::vector <std::string>,     Environment&);
 	}
 
 	class Environment {
@@ -112,6 +113,7 @@ namespace YSL {
 				increment(true)
 			{
 				builtins["print"]   = STD::Print;
+				builtins["println"] = STD::PrintLn;
 				builtins["exit"]    = STD::Exit;
 				builtins["run"]     = STD::Run;
 				builtins["goto"]    = STD::Goto;
@@ -176,6 +178,11 @@ namespace YSL {
 			for (size_t i = 0; i < args.size(); ++i) {
 				printf("%s%s", args[i].c_str(), i == args.size() - 1? "" : " ");
 			}
+			return {};
+		}
+		std::vector <int> PrintLn(std::vector <std::string> args, Environment& env) {
+			Print(args, env);
+			puts("");
 			return {};
 		}
 		std::vector <int> Exit(std::vector <std::string>, Environment&) {
@@ -245,6 +252,11 @@ namespace YSL {
 				exit(1);
 			}
 
+			if (env.variables[args[0]].empty() && (args[1] != "=")) {
+				fprintf(stderr, "Var: no such variable %s\n", args[0].c_str());
+				exit(1);
+			}
+
 			switch (args[1][0]) {
 				case '=': {
 					std::vector <int> value;
@@ -252,6 +264,26 @@ namespace YSL {
 						value.push_back(stoi(args[i]));
 					}
 					env.variables[args[0]] = value;
+					break;
+				}
+				case '+': {
+					env.variables[args[0]][0] += stoi(args[2]);
+					break;
+				}
+				case '-': {
+					env.variables[args[0]][0] -= stoi(args[2]);
+					break;
+				}
+				case '*': {
+					env.variables[args[0]][0] *= stoi(args[2]);
+					break;
+				}
+				case '/': {
+					env.variables[args[0]][0] /= stoi(args[2]);
+					break;
+				}
+				case '%': {
+					env.variables[args[0]][0] %= stoi(args[2]);
 					break;
 				}
 				default: {

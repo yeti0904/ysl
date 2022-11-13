@@ -56,3 +56,7 @@ takes 2 arguments, compares both and returns nonzero if they are equal
 var varname = element1 element2 element3
 ```
 ^ assigning variables, elements must be integers
+
+other operations include: +, -, *, /, %
+
+these operations will only be performed on the variable's first element
