@@ -1,0 +1,10 @@
+10 print "program> "
+20 input
+30 var program f return
+
+# iterate through the program
+40 var i = 0
+50 size program
+60 var programLen f return
+
+# check what operations need to be done

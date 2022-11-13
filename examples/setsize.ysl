@@ -1,0 +1,8 @@
+10 var array = 1 2 3
+20 set_size array 4
+30 var array s 3 4
+40 size array
+50 var arraySize f return
+60 println $arraySize
+70 var element f array 3
+80 println $element

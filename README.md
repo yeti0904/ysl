@@ -88,6 +88,13 @@ var array r 0 1
 # array is now 2 3 4 5
 ```
 
+the s operation sets 1 element in the array, first number is the index and the second number is the new value
+```
+var array = 1 2 3 4 5
+var array s 0 2
+# array is now 2 2 3 4 5
+```
+
 ## load
 loads the contents of a file into program memory, takes 1 argument which is filename
 
@@ -102,3 +109,8 @@ gets a line from stdin and returns it, no parameters
 
 ## putch
 takes in an integer argument and prints out the ASCII character of that integer
+
+## set_size
+takes in 2 parameters: array and new size
+
+it changes the size of the array

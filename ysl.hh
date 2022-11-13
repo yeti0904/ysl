@@ -104,6 +104,7 @@ namespace YSL {
 		std::vector <int> Getch(std::vector <std::string>,   Environment&);
 		std::vector <int> Input(std::vector <std::string>,   Environment&);
 		std::vector <int> Putch(std::vector <std::string>,   Environment&);
+		std::vector <int> SetSize(std::vector <std::string>, Environment&);
 	}
 
 	class Environment {
@@ -119,20 +120,21 @@ namespace YSL {
 			Environment():
 				increment(true)
 			{
-				builtins["print"]   = STD::Print;
-				builtins["println"] = STD::PrintLn;
-				builtins["exit"]    = STD::Exit;
-				builtins["run"]     = STD::Run;
-				builtins["goto"]    = STD::Goto;
-				builtins["goto_if"] = STD::GotoIf;
-				builtins["wait"]    = STD::Wait;
-				builtins["cmp"]     = STD::Cmp;
-				builtins["var"]     = STD::Var;
-				builtins["load"]    = STD::Load;
-				builtins["size"]    = STD::Size;
-				builtins["getch"]   = STD::Getch;
-				builtins["input"]   = STD::Input;
-				builtins["putch"]   = STD::Putch;
+				builtins["print"]    = STD::Print;
+				builtins["println"]  = STD::PrintLn;
+				builtins["exit"]     = STD::Exit;
+				builtins["run"]      = STD::Run;
+				builtins["goto"]     = STD::Goto;
+				builtins["goto_if"]  = STD::GotoIf;
+				builtins["wait"]     = STD::Wait;
+				builtins["cmp"]      = STD::Cmp;
+				builtins["var"]      = STD::Var;
+				builtins["load"]     = STD::Load;
+				builtins["size"]     = STD::Size;
+				builtins["getch"]    = STD::Getch;
+				builtins["input"]    = STD::Input;
+				builtins["putch"]    = STD::Putch;
+				builtins["set_size"] = STD::SetSize;
 			}
 
 			void ExitError() {
@@ -353,6 +355,16 @@ namespace YSL {
 					);
 					break;
 				}
+				case 's': {
+					if (args.size() < 4) {
+						fprintf(stderr, "set operator needs 4 arguments\n");
+						env.ExitError();
+					}
+
+					auto& arr = env.variables[args[0]];
+					arr[stol(args[2])] = stoi(args[3]);
+					break;
+				}
 				default: {
 					fprintf(stderr, "Var: unknown operation %c\n", args[1][0]);
 					env.ExitError();
@@ -407,6 +419,16 @@ namespace YSL {
 			}
 
 			putchar(stoi(args[0]));
+			return {};
+		}
+		std::vector <int> SetSize(std::vector <std::string> args, Environment& env) {
+			if (args.size() < 2) {
+				fprintf(stderr, "SetSize: needs at least 2 arguments\n");
+				env.ExitError();
+			}
+
+			auto& arr = env.variables[args[0]];
+			arr.resize(stoi(args[1]));
 			return {};
 		}
 	}
