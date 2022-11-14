@@ -54,10 +54,16 @@ no arguments, exits the program
 runs the code in program memory
 
 ### goto
-takes one argument which is a line number, jumps to that line number
+takes one argument which is a line number/label, jumps to that line number
 
 ### goto_if
 works the same as goto but only jumps if the last return value is nonzero
+
+### gosub
+works the same as goto but will jump back to where the function was called when `return` is called
+
+### gosub_if
+works the same as gosub but only calls if the last return value is nonzero
 
 ### wait
 takes one integer argument, sleeps for as many milliseconds as you tell it to
@@ -132,3 +138,6 @@ takes in an integer argument and prints out the ASCII character of that integer
 takes in 2 parameters: array and new size
 
 it changes the size of the array
+
+## return
+sets the current line the interpreter is running at to the last place a user-defined function was called

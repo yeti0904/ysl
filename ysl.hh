@@ -126,6 +126,9 @@ namespace YSL {
 		std::vector <int> Input(std::vector <std::string>,   Environment&);
 		std::vector <int> Putch(std::vector <std::string>,   Environment&);
 		std::vector <int> SetSize(std::vector <std::string>, Environment&);
+		std::vector <int> GoSub(std::vector <std::string>,   Environment&);
+		std::vector <int> GoSubIf(std::vector <std::string>, Environment&);
+		std::vector <int> Return(std::vector <std::string>,  Environment&);
 	}
 
 	class Environment {
@@ -137,6 +140,7 @@ namespace YSL {
 			std::map <std::string, std::vector <int>> variables;
 			std::vector <std::vector <int>>           returnValues;
 
+			std::vector <std::map <size_t, std::string>::iterator> calls;
 
 			Environment():
 				increment(true)
@@ -156,6 +160,9 @@ namespace YSL {
 				builtins["input"]    = STD::Input;
 				builtins["putch"]    = STD::Putch;
 				builtins["set_size"] = STD::SetSize;
+				builtins["gosub"]    = STD::GoSub;
+				builtins["gosub_if"] = STD::GoSubIf;
+				builtins["return"]   = STD::Return;
 			}
 
 			void ExitError() {
@@ -242,13 +249,13 @@ namespace YSL {
 					);
 
 					std::vector <int> ret;
-					try {
+					/*try {*/
 						ret = builtins[parts[0]](args, *this);
-					}
+					/*}
 					catch (...) {
 						fprintf(stderr, "Crashed at line %i\n", (int) lineAt->first);
 						exit(1);
-					}
+					}*/
 					if (!ret.empty()) {
 						returnValues.push_back(ret);
 					}
@@ -288,6 +295,10 @@ namespace YSL {
 				fprintf(stderr, "Goto: need at least 1 argument\n");
 				env.ExitError();
 			}
+			if (!Util::IsInteger(args[0])) {
+				fprintf(stderr, "Goto: invalid argument %s\n", args[0].c_str());
+				env.ExitError();
+			}
 
 			size_t to = stol(args[0]);
 			for (auto it = env.program.begin(); it != env.program.end(); ++it) {
@@ -311,6 +322,14 @@ namespace YSL {
 				return Goto(args, env);
 			}
 			return {};
+		}
+		std::vector <int> GoSub(std::vector <std::string> args, Environment& env) {
+			env.calls.push_back(env.lineAt);
+			return Goto(args, env);
+		}
+		std::vector <int> GoSubIf(std::vector <std::string> args, Environment& env) {
+			env.calls.push_back(env.lineAt);
+			return GotoIf(args, env);
 		}
 		std::vector <int> Wait(std::vector <std::string> args, Environment& env) {
 			if (args.size() == 0) {
@@ -507,6 +526,21 @@ namespace YSL {
 
 			auto& arr = env.variables[args[0]];
 			arr.resize(stoi(args[1]));
+			return {};
+		}
+		std::vector <int> Return(std::vector <std::string> args, Environment& env) {
+			if (args.size() < 1) {
+				
+			}
+			else if (Util::IsInteger(args[0])) {
+				env.returnValues.push_back({stoi(args[0])});
+			}
+			else {
+				env.returnValues.push_back(env.variables[args[0]]);
+			}
+
+			env.lineAt    = env.calls.back();
+			env.calls.pop_back();
 			return {};
 		}
 	}

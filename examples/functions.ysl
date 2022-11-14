@@ -1,0 +1,8 @@
+goto *main
+
+sayhello:
+	println "hello"
+	return
+
+main:
+	gosub *sayhello

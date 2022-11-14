@@ -1,0 +1,22 @@
+# written by zoe
+
+var num1 = 0
+var num2 = 1
+var i = 0
+
+loop:
+    var next = $num1
+    var next + $num2
+
+    var num1 = $num2
+    var num2 = $next
+
+    print $next
+    print "\n"
+    var i + 1
+    cmp $i 10
+    goto_if *exit
+    goto *loop
+
+exit:
+    exit
