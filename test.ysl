@@ -1,0 +1,3 @@
+mylabel:
+println "hello world"
+goto *mylabel

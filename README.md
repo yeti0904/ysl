@@ -86,6 +86,13 @@ if the last argument is not given then the first element is used
 
 if a variable `return` is used then it uses the return value of the last returning function
 
+the c operation copies an entire array to a new array, like this:
+```
+input
+var userInput c return
+#return works here too
+```
+
 the a operation appends 1 element to an array, like this:
 ```
 var array = 1 2 3 4 5

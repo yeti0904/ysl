@@ -364,6 +364,12 @@ namespace YSL {
 					env.variables[args[0]] = {arr[index]};
 					break;
 				}
+				case 'c': {
+					auto arr = args[2] == "return"?
+						env.returnValues.back() : env.variables[args[2]];
+					env.variables[args[0]] = arr;
+					break;
+				}
 				case 'a': {
 					env.variables[args[0]].push_back(stoi(args[2]));
 					break;
