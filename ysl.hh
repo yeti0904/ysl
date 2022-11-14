@@ -337,7 +337,7 @@ namespace YSL {
 
 			if (
 				env.variables[args[0]].empty() &&
-				(args[1] != "=") && (args[1] != "f")
+				(args[1] != "=") && (args[1] != "f") && (args[1] != "c")
 			) {
 				fprintf(stderr, "Var: no such variable %s\n", args[0].c_str());
 				env.ExitError();

@@ -5,8 +5,14 @@ detect:
 
 rules:
     - statement: "\\b(print|println|exit|run|goto|goto_if|wait|cmp|var|load|size)\\b"
+    - statement: "\\b(getch|input|putch|set_size)\\b"
     - identifier: "\\$\\{?[0-9A-Za-z_!@#$*?-]+\\}?"
     - identifier: "\\$\\{?[0-9A-Za-z_!@#$*?-]+\\}?"
+    - identifier: "\\*\\{?[0-9A-Za-z_!@#$*?-]+\\}?"
+    - identifier: "\\!\\{?[0-9A-Za-z_!@#$*?-]+\\}?"
+
+    
+    - functions: "\\b([A-Z_a-z][0-9A-Z_a-z]*)\\b\\s*\\:"
     
     - constant.string:
         start: "\""
@@ -21,7 +27,7 @@ rules:
     - constant.bool: "\\b(true|false)\\b"
     
     - comment:
-        start: "##"
+        start: "#"
         end: "$"
         rules:
             - todo: "(TODO|XXX|FIXME):?"

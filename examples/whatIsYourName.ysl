@@ -1,0 +1,4 @@
+print "what is your name? "
+input
+var name c return
+println "hello," !name
