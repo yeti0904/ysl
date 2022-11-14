@@ -20,6 +20,27 @@ namespace YSL {
 		    return true;
 		}
 
+		bool StringStartsWith(std::string str, std::string prefix) {
+			if (prefix.length() > str.length()) {
+				return false;
+			}
+			return str.substr(0, prefix.length()) == prefix;
+		}
+
+		std::string StringReplace(std::string str, char from, char to) {
+			std::string ret;
+			for (auto& ch : str) {
+				if (ch == from) {
+					ret += to;
+				}
+				else {
+					ret += ch;
+				}
+			}
+
+			return ret;
+		}
+
 		std::vector <std::string> SplitString(
 		    std::string str, char splitter, ssize_t maxSplit
 		) {
@@ -163,6 +184,24 @@ namespace YSL {
 					else if (arg[0] == '&') {
 						ret.push_back(std::to_string((int) arg[1]));
 					}
+					else if (arg[0] == '*') {
+						bool found = false;
+						for (auto it = program.begin(); it != program.end(); ++it) {
+							if (Util::StringStartsWith(it->second, arg.substr(1) + ':')) {
+								ret.push_back(std::to_string(it->first));
+								found = true;
+								break;
+							}
+						}
+
+						if (!found) {
+							fprintf(
+								stderr, "Tried to access non-existant label: %s\n",
+								arg.substr(1).c_str()
+							);
+							ExitError();
+						}
+					}
 					else {
 						ret.push_back(arg);
 					}
@@ -172,10 +211,11 @@ namespace YSL {
 			}
 
 			void Interpret(std::string code) {
+				code = Util::StringReplace(code, '\t', ' ');
+			
 				if (code[0] == '#') {
 					return; // comment
 				}
-			
 				auto parts = Util::SplitString(code, ' ', -1);
 				if (parts.empty()) {
 					return;
@@ -189,6 +229,10 @@ namespace YSL {
 					}
 				}
 				else {
+					if (code.back() == ':') {
+						return;
+					}
+					
 					if (builtins[parts[0]] == nullptr) {
 						fprintf(stderr, "No such function: %s\n", parts[0].c_str());
 						return;
@@ -414,9 +458,11 @@ namespace YSL {
 			env.program.clear();
 			std::ifstream             fhnd(args[0]);
 			std::string               line;
+			size_t                    lineNum = 10;
 
 			while (getline(fhnd, line)) {
-				env.Interpret(line);
+				env.program[lineNum] =  line;
+				lineNum              += 10;
 			}
 			fhnd.close();
 			puts("Loaded program");
