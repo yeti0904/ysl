@@ -191,7 +191,8 @@ namespace YSL {
 
 			void LoadExtension(const Extension& ext) {
 				for (auto it = ext.functions.begin(); it != ext.functions.end(); ++it) {
-					builtins[ext.name + "." + it->first] = it->second;
+					std::string functionName = ext.name + "." + it->first;
+					builtins[functionName] = it->second;
 				}
 			}
 

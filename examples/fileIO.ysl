@@ -1,0 +1,8 @@
+file.read "examples/fileIO.ysl"
+var contents c return
+println !contents
+
+file.write "file" "hello"
+file.read "file"
+var contents c return
+println !contents

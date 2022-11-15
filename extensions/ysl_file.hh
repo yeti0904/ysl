@@ -51,6 +51,7 @@ namespace YSL {
 			YSL::Extension BuildExtension() {
 				YSL::Extension ext;
 
+				ext.name               = "file";
 				ext.functions["read"]  = Read;
 				ext.functions["write"] = Write;
 
