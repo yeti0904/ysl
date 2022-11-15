@@ -107,12 +107,18 @@ namespace YSL {
 		}
 	}
 
+
 	class Environment;
 	typedef std::vector <int> (*Function)(std::vector <std::string>, Environment&);
 
 	#define YSL_STD_FUNCTION(F) \
 		std::vector <int> F(std::vector <std::string>, Environment&)
 
+	class Extension {
+		public:
+			std::map <std::string, Function> functions;
+	};
+	
 	namespace STD {
 		std::vector <int> Print(std::vector <std::string>,   Environment&);
 		std::vector <int> PrintLn(std::vector <std::string>, Environment&);
@@ -145,12 +151,14 @@ namespace YSL {
 			std::vector <std::vector <int>>           returnValues;
 			std::vector <std::vector <int>>           passes;
 			bool                                      yslDebug;
+			bool                                      fromProgram; // running from program map
 
 			std::vector <std::map <size_t, std::string>::iterator> calls;
 
 			Environment():
 				increment(true),
-				yslDebug(false)
+				yslDebug(false),
+				fromProgram(false)
 			{
 				builtins["print"]    = STD::Print;
 				builtins["println"]  = STD::PrintLn;
@@ -174,8 +182,16 @@ namespace YSL {
 			}
 
 			void ExitError() {
-				fprintf(stderr, "Exited at line %i\n", (int) lineAt->first);
+				if (fromProgram) {
+					fprintf(stderr, "Exited at line %i\n", (int) lineAt->first);
+				}
 				exit(1);
+			}
+
+			void LoadExtension(const Extension& ext) {
+				for (auto it = ext.functions.begin(); it != ext.functions.end(); ++it) {
+					builtins[it->first] = it->second;
+				}
 			}
 
 			std::vector <std::string> AddVariables(std::vector <std::string> args) {
@@ -296,6 +312,7 @@ namespace YSL {
 			return {};
 		}
 		std::vector <int> Run(std::vector <std::string>, Environment& env) {
+			env.fromProgram = true;
 			for (env.lineAt = env.program.begin(); env.lineAt != env.program.end();) {
 				env.Interpret(env.lineAt->second);
 
@@ -304,6 +321,7 @@ namespace YSL {
 				}
 				env.increment = true;
 			}
+			env.fromProgram = false;
 			return {};
 		}
 		std::vector <int> Goto(std::vector <std::string> args, Environment& env) {

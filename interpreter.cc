@@ -1,9 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include "ysl.hh"
+#include "extensions/ysl_file.hh"
 
 int main(int argc, char** argv) {
 	YSL::Environment env;
+
+	env.LoadExtension(YSL::Extensions::File::BuildExtension());
 
 	if (argc > 1) {
 		env.Interpret(std::string("load ") + argv[1]);
