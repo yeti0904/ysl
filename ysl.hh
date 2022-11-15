@@ -116,6 +116,7 @@ namespace YSL {
 
 	class Extension {
 		public:
+			std::string                      name;
 			std::map <std::string, Function> functions;
 	};
 	
@@ -190,7 +191,7 @@ namespace YSL {
 
 			void LoadExtension(const Extension& ext) {
 				for (auto it = ext.functions.begin(); it != ext.functions.end(); ++it) {
-					builtins[it->first] = it->second;
+					builtins[ext.name + "." + it->first] = it->second;
 				}
 			}
 
