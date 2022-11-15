@@ -141,3 +141,9 @@ it changes the size of the array
 
 ## return
 sets the current line the interpreter is running at to the last place a user-defined function was called
+
+when a parameter is passed:
+
+if it is an integer, that is put into return values stack as a 1 element array
+
+if it is not, it will be interpreted as a variable name and the contents of the variable are returned
