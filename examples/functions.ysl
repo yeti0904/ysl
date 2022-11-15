@@ -1,8 +1,25 @@
 goto *main
 
-sayhello:
-	println "hello"
+give5:
+	return 5
+
+giveHello:
+	var ret = "hallo warld"
+	return ret
+
+sayhelloto:
+	# pop a parameter from the pass stack
+	var name p
+	println "hello", !name
 	return
 
 main:
-	gosub *sayhello
+	gosub *sayhelloto "yeti"
+	
+	gosub *give5
+	var five f return
+	println $five
+	
+	gosub *giveHello
+	var hello c return
+	println !hello

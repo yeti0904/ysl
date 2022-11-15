@@ -110,6 +110,9 @@ namespace YSL {
 	class Environment;
 	typedef std::vector <int> (*Function)(std::vector <std::string>, Environment&);
 
+	#define YSL_STD_FUNCTION(F) \
+		std::vector <int> F(std::vector <std::string>, Environment&)
+
 	namespace STD {
 		std::vector <int> Print(std::vector <std::string>,   Environment&);
 		std::vector <int> PrintLn(std::vector <std::string>, Environment&);
@@ -129,6 +132,7 @@ namespace YSL {
 		std::vector <int> GoSub(std::vector <std::string>,   Environment&);
 		std::vector <int> GoSubIf(std::vector <std::string>, Environment&);
 		std::vector <int> Return(std::vector <std::string>,  Environment&);
+		std::vector <int> Debug(std::vector <std::string>,   Environment&);
 	}
 
 	class Environment {
@@ -139,11 +143,14 @@ namespace YSL {
 			bool                                      increment;
 			std::map <std::string, std::vector <int>> variables;
 			std::vector <std::vector <int>>           returnValues;
+			std::vector <std::vector <int>>           passes;
+			bool                                      yslDebug;
 
 			std::vector <std::map <size_t, std::string>::iterator> calls;
 
 			Environment():
-				increment(true)
+				increment(true),
+				yslDebug(false)
 			{
 				builtins["print"]    = STD::Print;
 				builtins["println"]  = STD::PrintLn;
@@ -163,6 +170,7 @@ namespace YSL {
 				builtins["gosub"]    = STD::GoSub;
 				builtins["gosub_if"] = STD::GoSubIf;
 				builtins["return"]   = STD::Return;
+				builtins["debug"]    = STD::Debug;
 			}
 
 			void ExitError() {
@@ -249,13 +257,21 @@ namespace YSL {
 					);
 
 					std::vector <int> ret;
-					/*try {*/
+					if (yslDebug) {
 						ret = builtins[parts[0]](args, *this);
-					/*}
-					catch (...) {
-						fprintf(stderr, "Crashed at line %i\n", (int) lineAt->first);
-						exit(1);
-					}*/
+					}
+					else {
+						try {
+							ret = builtins[parts[0]](args, *this);
+						}
+						catch (const std::exception& e) {
+							fprintf(
+								stderr, "Crashed at line %i\n", (int) lineAt->first
+							);
+							fprintf(stderr, "Error: %s\n", e.what());
+							exit(1);
+						}
+					}
 					if (!ret.empty()) {
 						returnValues.push_back(ret);
 					}
@@ -325,10 +341,38 @@ namespace YSL {
 		}
 		std::vector <int> GoSub(std::vector <std::string> args, Environment& env) {
 			env.calls.push_back(env.lineAt);
+
+			for (size_t i = 1; i < args.size(); ++i) {
+				if (Util::IsInteger(args[i])) {
+					env.passes.push_back({stoi(args[i])});
+				}
+				else {
+					std::vector <int> str;
+					for (auto& ch : args[i]) {
+						str.push_back(ch);
+					}
+					env.passes.push_back(str);
+				}
+			}
+			
 			return Goto(args, env);
 		}
 		std::vector <int> GoSubIf(std::vector <std::string> args, Environment& env) {
 			env.calls.push_back(env.lineAt);
+
+			for (size_t i = 1; i < args.size(); ++i) {
+				if (Util::IsInteger(args[i])) {
+					env.passes.push_back({stoi(args[i])});
+				}
+				else {
+					std::vector <int> str;
+					for (auto& ch : args[i]) {
+						str.push_back(ch);
+					}
+					env.passes.push_back({stoi(args[i])});
+				}
+			}
+			
 			return GotoIf(args, env);
 		}
 		std::vector <int> Wait(std::vector <std::string> args, Environment& env) {
@@ -349,14 +393,15 @@ namespace YSL {
 			return {args[0] == args[1]? 1 : 0};
 		}
 		std::vector <int> Var(std::vector <std::string> args, Environment& env) {
-			if (args.size() < 3) {
+			if ((args.size() < 3) && !((args.size() > 1) && (args[1] == "p"))) {
 				fprintf(stderr, "Var: needs at least 3 arguments\n");
 				env.ExitError();
 			}
 
 			if (
 				env.variables[args[0]].empty() &&
-				(args[1] != "=") && (args[1] != "f") && (args[1] != "c")
+				(args[1] != "=") && (args[1] != "f") && (args[1] != "c") &&
+				(args[1] != "p")
 			) {
 				fprintf(stderr, "Var: no such variable %s\n", args[0].c_str());
 				env.ExitError();
@@ -431,6 +476,16 @@ namespace YSL {
 					auto arr = args[2] == "return"?
 						env.returnValues.back() : env.variables[args[2]];
 					env.variables[args[0]] = arr;
+					break;
+				}
+				case 'p': {
+					if (env.passes.empty()) {
+						fprintf(stderr, "Var: p: nothing to pop from pass stack\n");
+						env.ExitError();
+					}
+
+					env.variables[args[0]] = env.passes.back();
+					env.passes.pop_back();
 					break;
 				}
 				case 'a': {
@@ -536,11 +591,16 @@ namespace YSL {
 				env.returnValues.push_back({stoi(args[0])});
 			}
 			else {
-				env.returnValues.push_back(env.variables[args[0]]);
+				env.returnValues.push_back(env.variables[args[0]]); // from variable
 			}
 
 			env.lineAt    = env.calls.back();
 			env.calls.pop_back();
+			return {};
+		}
+		std::vector <int> Debug(std::vector <std::string>, Environment& env) {
+			env.yslDebug = !env.yslDebug;
+			puts(std::to_string(env.yslDebug).c_str());
 			return {};
 		}
 	}
