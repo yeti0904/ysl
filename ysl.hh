@@ -112,7 +112,7 @@ namespace YSL {
 	class Environment;
 	typedef std::vector <int> (*Function)(std::vector <std::string>, Environment&);
 
-	#define YSL_STD_FUNCTION(F) \
+	#define YSL_FUNCTION(F) \
 		std::vector <int> F(std::vector <std::string>, Environment&)
 
 	class Extension {
@@ -122,26 +122,28 @@ namespace YSL {
 	};
 	
 	namespace STD {
-		std::vector <int> Print(std::vector <std::string>,   Environment&);
-		std::vector <int> PrintLn(std::vector <std::string>, Environment&);
-		std::vector <int> Exit(std::vector <std::string>,    Environment&);
-		std::vector <int> Run(std::vector <std::string>,     Environment&);
-		std::vector <int> Goto(std::vector <std::string>,    Environment&);
-		std::vector <int> GotoIf(std::vector <std::string>,  Environment&);
-		std::vector <int> Wait(std::vector <std::string>,    Environment&);
-		std::vector <int> Cmp(std::vector <std::string>,     Environment&);
-		std::vector <int> Var(std::vector <std::string>,     Environment&);
-		std::vector <int> Load(std::vector <std::string>,    Environment&);
-		std::vector <int> Size(std::vector <std::string>,    Environment&);
-		std::vector <int> Getch(std::vector <std::string>,   Environment&);
-		std::vector <int> Input(std::vector <std::string>,   Environment&);
-		std::vector <int> Putch(std::vector <std::string>,   Environment&);
-		std::vector <int> SetSize(std::vector <std::string>, Environment&);
-		std::vector <int> GoSub(std::vector <std::string>,   Environment&);
-		std::vector <int> GoSubIf(std::vector <std::string>, Environment&);
-		std::vector <int> Return(std::vector <std::string>,  Environment&);
-		std::vector <int> Debug(std::vector <std::string>,   Environment&);
-		std::vector <int> Swap(std::vector <std::string>,    Environment&);
+		YSL_FUNCTION(Print);
+		YSL_FUNCTION(PrintLn);
+		YSL_FUNCTION(Exit);
+		YSL_FUNCTION(Run);
+		YSL_FUNCTION(Goto);
+		YSL_FUNCTION(GotoIf);
+		YSL_FUNCTION(Wait);
+		YSL_FUNCTION(Cmp);
+		YSL_FUNCTION(Var);
+		YSL_FUNCTION(Load);
+		YSL_FUNCTION(Size);
+		YSL_FUNCTION(Getch);
+		YSL_FUNCTION(Input);
+		YSL_FUNCTION(Putch);
+		YSL_FUNCTION(SetSize);
+		YSL_FUNCTION(GoSub);
+		YSL_FUNCTION(GoSubIf);
+		YSL_FUNCTION(Return);
+		YSL_FUNCTION(Debug);
+		YSL_FUNCTION(Swap);
+		YSL_FUNCTION(Gt);
+		YSL_FUNCTION(Lt);
 	}
 
 	class Environment {
@@ -183,6 +185,8 @@ namespace YSL {
 				builtins["return"]   = STD::Return;
 				builtins["debug"]    = STD::Debug;
 				builtins["swap"]     = STD::Swap;
+				builtins["gt"]       = STD::Gt;
+				builtins["lt"]       = STD::Lt;
 			}
 
 			void ExitError() {
@@ -632,6 +636,26 @@ namespace YSL {
 			}
 			std::swap(env.variables[args[0]], env.variables[args[1]]);
 			return {};
+		}
+		std::vector <int> Gt(std::vector <std::string> args, Environment& env) {
+			if (args.size() < 2) {
+				fprintf(stderr, "Gt: needs at least 2 arguments\n");
+				env.ExitError();
+			}
+
+			return {
+				(stoi(args[0]) > stoi(args[1]))? 1 : 0
+			};
+		}
+		std::vector <int> Lt(std::vector <std::string> args, Environment& env) {
+			if (args.size() < 2) {
+				fprintf(stderr, "Gt: needs at least 2 arguments\n");
+				env.ExitError();
+			}
+
+			return {
+				(stoi(args[0]) < stoi(args[1]))? 1 : 0
+			};
 		}
 	}
 }

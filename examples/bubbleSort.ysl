@@ -1,0 +1,23 @@
+var list = 7 9 6 8 4 3 7 9 2 7 4 8 1 4 8 5 9
+size list
+var listSz f return
+var listSz - 1
+
+var i  = 0
+var i2 = 0
+var changesMade = 0
+loop:
+	var i2 = i
+	var i2 + 1
+	var e1 f list $i
+	var e2 f list $i2
+
+	
+	
+	var i + 1
+	cmp $i $listSz
+	goto_if *end
+	goto *loop
+
+end:
+	exit

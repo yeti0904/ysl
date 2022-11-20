@@ -89,7 +89,7 @@ var element f array 0
 println $element
 ```
 if the last argument is not given then the first element is used
-
+[E
 if a variable `return` is used then it uses the return value of the last returning function
 
 the c operation copies an entire array to a new array, like this:
@@ -150,3 +150,9 @@ if it is not, it will be interpreted as a variable name and the contents of the 
 
 ## swap
 takes in 2 arguments: variable names and swaps the contents with each other
+
+## gt
+takes in 2 arguments and returns true if the first argument is greater than the second argument
+
+## lt
+takes in 2 arguments and returns false if the first argument is smaller than the second argument
