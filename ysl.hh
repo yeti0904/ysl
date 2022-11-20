@@ -8,6 +8,7 @@
 #include <thread>
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 namespace YSL {
 	namespace Util {
@@ -140,6 +141,7 @@ namespace YSL {
 		std::vector <int> GoSubIf(std::vector <std::string>, Environment&);
 		std::vector <int> Return(std::vector <std::string>,  Environment&);
 		std::vector <int> Debug(std::vector <std::string>,   Environment&);
+		std::vector <int> Swap(std::vector <std::string>,    Environment&);
 	}
 
 	class Environment {
@@ -180,6 +182,7 @@ namespace YSL {
 				builtins["gosub_if"] = STD::GoSubIf;
 				builtins["return"]   = STD::Return;
 				builtins["debug"]    = STD::Debug;
+				builtins["swap"]     = STD::Swap;
 			}
 
 			void ExitError() {
@@ -559,7 +562,6 @@ namespace YSL {
 				lineNum              += 10;
 			}
 			fhnd.close();
-			puts("Loaded program");
 			return {};
 		}
 		std::vector <int> Size(std::vector <std::string> args, Environment& env) {
@@ -621,6 +623,14 @@ namespace YSL {
 		std::vector <int> Debug(std::vector <std::string>, Environment& env) {
 			env.yslDebug = !env.yslDebug;
 			puts(std::to_string(env.yslDebug).c_str());
+			return {};
+		}
+		std::vector <int> Swap(std::vector <std::string> args, Environment& env) {
+			if (args.size() < 2) {
+				fprintf(stderr, "Swap: needs at least 2 arguments\n");
+				env.ExitError();
+			}
+			std::swap(env.variables[args[0]], env.variables[args[1]]);
 			return {};
 		}
 	}

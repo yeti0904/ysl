@@ -1,0 +1,8 @@
+var v1 = 5
+var v2 = 10
+
+println "v1 = " $v1 "\nv2 = " $v2
+
+swap v1 v2
+
+println "v1 = " $v1 "\nv2 = " $v2
