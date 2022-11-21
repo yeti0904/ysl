@@ -345,14 +345,8 @@ namespace YSL {
 			return {};
 		}
 		std::vector <int> Goto(std::vector <std::string> args, Environment& env) {
-			if (args.size() == 0) {
-				fprintf(stderr, "Goto: need at least 1 argument\n");
-				env.ExitError();
-			}
-			if (!Util::IsInteger(args[0])) {
-				fprintf(stderr, "Goto: invalid argument %s\n", args[0].c_str());
-				env.ExitError();
-			}
+			env.Assert(args.size() == 1, "Goto: needs 1 argument");
+			env.Assert(Util::IsInteger(args[0]), "Goto: argument must be integer");
 
 			size_t to = stol(args[0]);
 			for (auto it = env.program.begin(); it != env.program.end(); ++it) {
@@ -367,10 +361,7 @@ namespace YSL {
 			return {};
 		}
 		std::vector <int> GotoIf(std::vector <std::string> args, Environment& env) {
-			if (args.size() == 0) {
-				fprintf(stderr, "Goto_if: needs at least 1 argument\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 1, "GotoIf: needs 1 argument");
 
 			if (!env.returnValues.empty() && (env.returnValues.back()[0] != 0)) {
 				return Goto(args, env);
@@ -378,6 +369,8 @@ namespace YSL {
 			return {};
 		}
 		std::vector <int> GoSub(std::vector <std::string> args, Environment& env) {
+			env.Assert(args.size() >= 1, "GoSub: Needs at least 1 argument");
+		
 			env.calls.push_back(env.lineAt);
 
 			for (size_t i = 1; i < args.size(); ++i) {
@@ -396,6 +389,8 @@ namespace YSL {
 			return Goto(args, env);
 		}
 		std::vector <int> GoSubIf(std::vector <std::string> args, Environment& env) {
+			env.Assert(args.size() >= 1, "GoSubIf: Needs at least 1 argument");
+		
 			env.calls.push_back(env.lineAt);
 
 			for (size_t i = 1; i < args.size(); ++i) {
@@ -414,28 +409,22 @@ namespace YSL {
 			return GotoIf(args, env);
 		}
 		std::vector <int> Wait(std::vector <std::string> args, Environment& env) {
-			if (args.size() == 0) {
-				fprintf(stderr, "Wait: needs at least 1 argument\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 1, "Wait: needs 1 argument");
+			env.Assert(Util::IsInteger(args[0]), "Wait: argument must be integer");
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(stol(args[0])));
 			return {};
 		}
 		std::vector <int> Cmp(std::vector <std::string> args, Environment& env) {
-			if (args.size() < 2) {
-				fprintf(stderr, "Cmp: needs at least 2 arguments\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 2, "Cmp: needs 2 arguments");
 
 			return {args[0] == args[1]? 1 : 0};
 		}
 		std::vector <int> Var(std::vector <std::string> args, Environment& env) {
 			if ((args.size() < 3) && !((args.size() > 1) && (args[1] == "p"))) {
-				fprintf(stderr, "Var: needs at least 3 arguments\n");
-				env.ExitError();
+				env.Assert(false, "Var: needs at least 3 arguments");
 			}
-
+			
 			if (
 				env.variables[args[0]].empty() &&
 				(args[1] != "=") && (args[1] != "f") && (args[1] != "c") &&
@@ -464,22 +453,42 @@ namespace YSL {
 					break;
 				}
 				case '+': {
+					env.Assert(
+						Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+					);
+				
 					env.variables[args[0]][0] += stoi(args[2]);
 					break;
 				}
 				case '-': {
+					env.Assert(
+						Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+					);
+				
 					env.variables[args[0]][0] -= stoi(args[2]);
 					break;
 				}
 				case '*': {
+					env.Assert(
+						Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+					);
+				
 					env.variables[args[0]][0] *= stoi(args[2]);
 					break;
 				}
 				case '/': {
+					env.Assert(
+						Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+					);
+				
 					env.variables[args[0]][0] /= stoi(args[2]);
 					break;
 				}
 				case '%': {
+					env.Assert(
+						Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+					);
+				
 					env.variables[args[0]][0] %= stoi(args[2]);
 					break;
 				}
@@ -550,6 +559,12 @@ namespace YSL {
 					}
 
 					auto& arr = env.variables[args[0]];
+					
+					env.Assert(
+						Util::IsInteger(args[2]) && Util::IsInteger(args[3]),
+						"Var: argument 3 and 4 must be an integer"
+					);
+				
 					arr[stol(args[2])] = stoi(args[3]);
 					break;
 				}
@@ -562,10 +577,7 @@ namespace YSL {
 			return {};
 		}
 		std::vector <int> Load(std::vector <std::string> args, Environment& env) {
-			if (args.empty()) {
-				fprintf(stderr, "Load: needs at least 1 argument\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 1, "Load: needs 1 argument");
 
 			env.program.clear();
 			std::ifstream             fhnd(args[0]);
@@ -580,10 +592,7 @@ namespace YSL {
 			return {};
 		}
 		std::vector <int> Size(std::vector <std::string> args, Environment& env) {
-			if (args.empty()) {
-				fprintf(stderr, "Size: needs at least 1 argument\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 1, "Size: needs 1 argument");
 
 			return {(int) env.variables[args[0]].size()};
 		}
@@ -602,25 +611,22 @@ namespace YSL {
 			return ret;
 		}
 		std::vector <int> Putch(std::vector <std::string> args, Environment& env) {
-			if (args.empty()) {
-				fprintf(stderr, "Putch: needs at least 1 argument\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 1, "Putch: needs 1 argument");
+			env.Assert(Util::IsInteger(args[0]), "Putch: requires integer argument");
 
 			putchar(stoi(args[0]));
 			return {};
 		}
 		std::vector <int> SetSize(std::vector <std::string> args, Environment& env) {
-			if (args.size() < 2) {
-				fprintf(stderr, "SetSize: needs at least 2 arguments\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 2, "SetSize: needs 2 arguments");
 
 			auto& arr = env.variables[args[0]];
 			arr.resize(stoi(args[1]));
 			return {};
 		}
 		std::vector <int> Return(std::vector <std::string> args, Environment& env) {
+			env.Assert(!env.calls.empty(), "Return: nowhere to return to");
+		
 			if (args.size() < 1) {
 				
 			}
@@ -641,32 +647,27 @@ namespace YSL {
 			return {};
 		}
 		std::vector <int> Swap(std::vector <std::string> args, Environment& env) {
-			if (args.size() < 2) {
-				fprintf(stderr, "Swap: needs at least 2 arguments\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 2, "Swap: needs 2 arguments");
+			
 			std::swap(env.variables[args[0]], env.variables[args[1]]);
 			return {};
 		}
 		std::vector <int> Gt(std::vector <std::string> args, Environment& env) {
-			if (args.size() < 2) {
-				fprintf(stderr, "Gt: needs at least 2 arguments\n");
-				env.ExitError();
-			}
+			env.Assert(args.size() == 2, "Gt: needs at least 2 arguments");
+			env.Assert(
+				Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+				"Gt: needs integer arguments"
+			);
 
 			return {
 				(stoi(args[0]) > stoi(args[1]))? 1 : 0
 			};
 		}
 		std::vector <int> Lt(std::vector <std::string> args, Environment& env) {
-			if (args.size() < 2) {
-				fprintf(stderr, "Gt: needs at least 2 arguments\n");
-				env.ExitError();
-			}
-
+			env.Assert(args.size() == 2, "Gt: needs 2 arguments");
 			env.Assert(
 				!Util::IsInteger(args[0]) || !Util::IsInteger(args[1]),
-				"Pow: needs integer arguments"
+				"Lt: needs integer arguments"
 			);
 
 			return {
