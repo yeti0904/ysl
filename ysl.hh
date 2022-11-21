@@ -153,6 +153,7 @@ namespace YSL {
 		YSL_FUNCTION(Gt);
 		YSL_FUNCTION(Lt);
 		YSL_FUNCTION(Pow);
+		YSL_FUNCTION(Flush);
 	}
 
 	class Environment {
@@ -197,6 +198,7 @@ namespace YSL {
 				builtins["gt"]       = STD::Gt;
 				builtins["lt"]       = STD::Lt;
 				builtins["pow"]      = STD::Pow;
+				builtins["flush"]    = STD::Flush;
 			}
 
 			void ExitError() {
@@ -692,6 +694,10 @@ namespace YSL {
 			);
 
 			return {(int) pow((double) stoi(args[0]), (double) stoi(args[1]))};
+		}
+		std::vector <int> Flush(std::vector <std::string>, Environment&) {
+			fflush(stdout);
+			return {};
 		}
 	}
 }
