@@ -39,7 +39,16 @@ print &A
 # prints 65
 ```
 
-## builtins
+## interpreter defined variables
+`__platform` is a variable to show what platform YSL is running on, it can be one of the following
+- `__platform_windows`
+- `__platform_apple`
+- `__platform_linux`
+- `__platform_unix`
+- `__platform_unknown`
+
+
+## builtin functions
 
 ### print
 prints all arguments to stdout seperated by a space

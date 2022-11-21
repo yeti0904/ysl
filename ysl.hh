@@ -12,6 +12,18 @@
 #include <iostream>
 #include <algorithm>
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+	#define YSL_PLATFORM_WINDOWS
+#elif defined(__APPLE__)
+	#define YSL_PLATFORM_APPLE
+#elif defined(__linux__)
+	#define YSL_PLATFORM_LINUX
+#elif defined(__unix__)
+	#define YSL_PLATFORM_UNIX
+#else
+	#define YSL_PLATFORM_UNKNOWN
+#endif
+
 namespace YSL {
 	namespace Util {
 		bool IsInteger(std::string str) {
@@ -197,6 +209,23 @@ namespace YSL {
 				builtins["gt"]       = STD::Gt;
 				builtins["lt"]       = STD::Lt;
 				builtins["pow"]      = STD::Pow;
+
+				#ifdef YSL_PLATFORM_WINDOWS
+					variables["__platform"] = {1};
+				#elif defined(YSL_PLATFORM_APPLE)
+					variables["__platform"] = {2};
+				#elif defined(YSL_PLATFORM_LINUX)
+					variables["__platform"] = {3};
+				#elif defined(YSL_PLATFORM_UNIX)
+					variables["__platform"] = {4};
+				#elif defined(YSL_PLATFORM_UNKNOWN)
+					variables["__platform"] = {0};
+				#endif
+				variables["__platform_windows"] = {1};
+				variables["__platform_apple"]   = {2};
+				variables["__platform_linux"]   = {3};
+				variables["__platform_unix"]    = {4};
+				variables["__platform_unknown"] = {5};
 			}
 
 			void ExitError() {
@@ -211,6 +240,14 @@ namespace YSL {
 					fprintf(stderr, "%s\n", error.c_str());
 					ExitError();
 				}
+			}
+
+			void AddFunction(std::string name, Function function) {
+				builtins[name] = function;
+			}
+
+			void SetVariable(std::string name, std::vector <int> value) {
+				variables[name] = value;
 			}
 
 			void LoadExtension(const Extension& ext) {
