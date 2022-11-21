@@ -1,6 +1,8 @@
 #ifndef YSL_YSL_HH
 #define YSL_YSL_HH
 
+#include <math.h>
+
 #include <map>
 #include <string>
 #include <vector>
@@ -144,6 +146,7 @@ namespace YSL {
 		YSL_FUNCTION(Swap);
 		YSL_FUNCTION(Gt);
 		YSL_FUNCTION(Lt);
+		YSL_FUNCTION(Pow);
 	}
 
 	class Environment {
@@ -187,6 +190,7 @@ namespace YSL {
 				builtins["swap"]     = STD::Swap;
 				builtins["gt"]       = STD::Gt;
 				builtins["lt"]       = STD::Lt;
+				builtins["pow"]      = STD::Pow;
 			}
 
 			void ExitError() {
@@ -194,6 +198,13 @@ namespace YSL {
 					fprintf(stderr, "Exited at line %i\n", (int) lineAt->first);
 				}
 				exit(1);
+			}
+
+			void Assert(bool b, std::string error) {
+				if (!b) {
+					fprintf(stderr, "%s\n", error.c_str());
+					ExitError();
+				}
 			}
 
 			void LoadExtension(const Extension& ext) {
@@ -653,9 +664,23 @@ namespace YSL {
 				env.ExitError();
 			}
 
+			env.Assert(
+				!Util::IsInteger(args[0]) || !Util::IsInteger(args[1]),
+				"Pow: needs integer arguments"
+			);
+
 			return {
 				(stoi(args[0]) < stoi(args[1]))? 1 : 0
 			};
+		}
+		std::vector <int> Pow(std::vector <std::string> args, Environment& env) {
+			env.Assert(args.size() == 2, "Pow: needs 2 arguments");
+			env.Assert(
+				Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+				"Pow: needs integer arguments"
+			);
+
+			return {(int) pow((double) stoi(args[0]), (double) stoi(args[1]))};
 		}
 	}
 }

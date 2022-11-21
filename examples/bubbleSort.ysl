@@ -1,23 +1,58 @@
+# does not work
+
 var list = 7 9 6 8 4 3 7 9 2 7 4 8 1 4 8 5 9
 size list
 var listSz f return
 var listSz - 1
 
-var i  = 0
-var i2 = 0
-var changesMade = 0
+# start first pass
+goto *pass
+
+pass:
+	var i = 0
+	goto *loop
 loop:
-	var i2 = i
+	var changesMade = 0
+	var i2 = $i
 	var i2 + 1
 	var e1 f list $i
 	var e2 f list $i2
 
-	
-	
+	gt $e1 $e2
+	goto_if *swap
+	goto *continue
+
+continue:
+	var i + 1
+	cmp $i $listSz
+	goto_if *nextStage
+	goto *loop
+
+swap:
+	swap e1 e2
+	var list s $i $e1
+	var list s $i2 $e2
+	var changesMade = 1
+	goto *continue
+
+nextStage:
+	cmp $changesMade 0
+	goto_if *display
+	goto *pass
+
+display:
+	var listSz + 1
+	var i = 0
+	goto *displayLoop
+
+displayLoop:
+	var it f list $i
+	println $it
+
 	var i + 1
 	cmp $i $listSz
 	goto_if *end
-	goto *loop
+	goto *displayLoop
 
 end:
 	exit

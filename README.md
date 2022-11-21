@@ -156,3 +156,6 @@ takes in 2 arguments and returns true if the first argument is greater than the 
 
 ## lt
 takes in 2 arguments and returns false if the first argument is smaller than the second argument
+
+## pow
+takes in 2 integer arguments and returns the first integer multiplied to the power of the second integer
