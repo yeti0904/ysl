@@ -47,6 +47,10 @@ namespace YSL {
 
 				return {};
 			}
+			std::vector <int> Flush(std::vector <std::string>, Environment&) {
+				fflush(stdout);
+				return {};
+			}
 
 			YSL::Extension BuildExtension() {
 				YSL::Extension ext;
@@ -54,6 +58,7 @@ namespace YSL {
 				ext.name               = "file";
 				ext.functions["read"]  = Read;
 				ext.functions["write"] = Write;
+				ext.functions["flush"] = Flush;
 
 				return ext;
 			}

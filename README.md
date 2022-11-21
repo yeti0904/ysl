@@ -160,5 +160,3 @@ takes in 2 arguments and returns false if the first argument is smaller than the
 ## pow
 takes in 2 integer arguments and returns the first integer multiplied to the power of the second integer
 
-## flush
-flushes stdout
