@@ -44,6 +44,12 @@ namespace YSL {
 			return ret;
 		}
 
+		std::string TrimString(std::string str) {
+			size_t start = str.find_first_not_of(' ');
+			size_t end   = str.find_last_not_of(' ');
+			return str.substr(start, end - start);
+		}
+
 		std::vector <std::string> SplitString(
 		    std::string str, char splitter, ssize_t maxSplit
 		) {
@@ -238,7 +244,11 @@ namespace YSL {
 					else if (arg[0] == '*') {
 						bool found = false;
 						for (auto it = program.begin(); it != program.end(); ++it) {
-							if (Util::StringStartsWith(it->second, arg.substr(1) + ':')) {
+							if (
+								Util::StringStartsWith(
+									Util::TrimString(it->second), arg.substr(1) + ':'
+								)
+							) {
 								ret.push_back(std::to_string(it->first));
 								found = true;
 								break;
