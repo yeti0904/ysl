@@ -1,0 +1,19 @@
+var regex = "[A-Z]*"
+
+print "Type a string: "
+input
+var str c return
+
+regex.match !regex !str
+var res f return
+cmp $res 1
+goto_if *valid
+goto *invalid
+
+valid:
+	println "This text only has uppercase text"
+	exit
+
+invalid:
+	println "This text does not only have uppercase text"
+	exit

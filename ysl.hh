@@ -57,9 +57,23 @@ namespace YSL {
 		}
 
 		std::string TrimString(std::string str) {
+			if (str.empty()) {
+				return str;
+			}
+			
 			size_t start = str.find_first_not_of(' ');
-			size_t end   = str.find_last_not_of(' ');
+			size_t end   = str.find_last_not_of(' ') + 1;
 			return str.substr(start, end - start);
+		}
+
+		std::vector <int> StringToIntVector(std::string str) {
+			std::vector <int> ret;
+
+			for (auto& ch : str) {
+				ret.push_back(ch);
+			}
+
+			return ret;
 		}
 
 		std::vector <std::string> SplitString(
