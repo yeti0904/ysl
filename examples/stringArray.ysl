@@ -1,0 +1,33 @@
+string_array n "YSL" "is" "cool"
+var array c return
+var i = 0
+size array
+var arraySize f return
+string_array l array
+var stringCount f return
+
+println "Raw data:"
+rawDataLoop:
+	var it f array $i
+	println $i ": (" $it ") " !it 
+	var i + 1
+	cmp $i $arraySize
+	goto_if *startShowString
+	goto *rawDataLoop
+
+startShowString:
+	var i = 0
+	println "Strings:"
+
+showStringLoop:
+	string_array g array $i
+	var it c return
+	println $i !it
+
+	var i + 1
+	cmp $i $stringCount
+	goto_if *exit
+	goto *showStringLoop
+
+exit:
+	exit

@@ -75,6 +75,40 @@ namespace YSL {
 
 			return ret;
 		}
+		std::vector <int> StringVectorToIntVector(std::vector <std::string> vec) {
+			std::vector <int> ret;
+		
+			for (auto& str : vec) {
+				for (auto& ch : str) {
+					ret.push_back(ch);
+				}
+				ret.push_back(0);
+			}
+
+			return ret;
+		}
+		std::vector <std::string> IntVectorToStringVector(std::vector <int> vec) {
+			size_t                    index = 0;
+			std::string               reading;
+			std::vector <std::string> ret;
+
+			for (auto& ch : vec) {
+				switch (ch) {
+					case '\0': {
+						++ index;
+						ret.push_back(reading);
+						reading = "";
+						break;
+					}
+					default: {
+						reading += ch;
+						break;
+					}
+				}
+			}
+
+			return ret;
+		}
 
 		std::vector <std::string> SplitString(
 		    std::string str, char splitter, ssize_t maxSplit
@@ -179,6 +213,7 @@ namespace YSL {
 		YSL_FUNCTION(Gt);
 		YSL_FUNCTION(Lt);
 		YSL_FUNCTION(Pow);
+		YSL_FUNCTION(StringArray);
 	}
 
 	class Environment {
@@ -200,29 +235,30 @@ namespace YSL {
 				yslDebug(false),
 				fromProgram(false)
 			{
-				builtins["print"]    = STD::Print;
-				builtins["println"]  = STD::PrintLn;
-				builtins["exit"]     = STD::Exit;
-				builtins["run"]      = STD::Run;
-				builtins["goto"]     = STD::Goto;
-				builtins["goto_if"]  = STD::GotoIf;
-				builtins["wait"]     = STD::Wait;
-				builtins["cmp"]      = STD::Cmp;
-				builtins["var"]      = STD::Var;
-				builtins["load"]     = STD::Load;
-				builtins["size"]     = STD::Size;
-				builtins["getch"]    = STD::Getch;
-				builtins["input"]    = STD::Input;
-				builtins["putch"]    = STD::Putch;
-				builtins["set_size"] = STD::SetSize;
-				builtins["gosub"]    = STD::GoSub;
-				builtins["gosub_if"] = STD::GoSubIf;
-				builtins["return"]   = STD::Return;
-				builtins["debug"]    = STD::Debug;
-				builtins["swap"]     = STD::Swap;
-				builtins["gt"]       = STD::Gt;
-				builtins["lt"]       = STD::Lt;
-				builtins["pow"]      = STD::Pow;
+				builtins["print"]        = STD::Print;
+				builtins["println"]      = STD::PrintLn;
+				builtins["exit"]         = STD::Exit;
+				builtins["run"]          = STD::Run;
+				builtins["goto"]         = STD::Goto;
+				builtins["goto_if"]      = STD::GotoIf;
+				builtins["wait"]         = STD::Wait;
+				builtins["cmp"]          = STD::Cmp;
+				builtins["var"]          = STD::Var;
+				builtins["load"]         = STD::Load;
+				builtins["size"]         = STD::Size;
+				builtins["getch"]        = STD::Getch;
+				builtins["input"]        = STD::Input;
+				builtins["putch"]        = STD::Putch;
+				builtins["set_size"]     = STD::SetSize;
+				builtins["gosub"]        = STD::GoSub;
+				builtins["gosub_if"]     = STD::GoSubIf;
+				builtins["return"]       = STD::Return;
+				builtins["debug"]        = STD::Debug;
+				builtins["swap"]         = STD::Swap;
+				builtins["gt"]           = STD::Gt;
+				builtins["lt"]           = STD::Lt;
+				builtins["pow"]          = STD::Pow;
+				builtins["string_array"] = STD::StringArray;
 
 				#ifdef YSL_PLATFORM_WINDOWS
 					variables["__platform"] = {1};
@@ -743,6 +779,51 @@ namespace YSL {
 			);
 
 			return {(int) pow((double) stoi(args[0]), (double) stoi(args[1]))};
+		}
+		std::vector <int> StringArray(std::vector <std::string> args, Environment& env) {
+			env.Assert(args.size() >= 2, "StringArray: Needs at least 2 arguments");
+		
+			switch (args[0][0]) {
+				case 'n': {
+					std::vector <std::string> newArray;
+					for (size_t i = 1; i < args.size(); ++i) {
+						newArray.push_back(args[i]);
+					}
+					return Util::StringVectorToIntVector(newArray);
+					break;
+				}
+				case 'g': {
+					env.Assert(
+						args.size() == 3, "StringArray: g operator needs 3 arguments"
+					);
+					env.Assert(
+						Util::IsInteger(args[2]), "StringArray: Index must be integer"
+					);
+					auto array = Util::IntVectorToStringVector(env.variables[args[1]]);
+					auto index = stoi(args[2]);
+
+					env.Assert(
+						(index >= 0) && ((size_t) index < array.size()),
+						"StringArray: Index out of range for array of size " +
+						std::to_string(array.size())
+					);
+
+					return Util::StringToIntVector(array[index]);
+					break;
+				}
+				case 'l': {
+					auto array = Util::IntVectorToStringVector(env.variables[args[1]]);
+
+					return {(int) array.size()};
+					break;
+				}
+				default: {
+					env.Assert(false, "StringArray: Unknown operator " + args[1]);
+					break;
+				}
+			}
+
+			return {};
 		}
 	}
 }

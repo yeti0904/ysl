@@ -169,3 +169,25 @@ takes in 2 arguments and returns false if the first argument is smaller than the
 ## pow
 takes in 2 integer arguments and returns the first integer multiplied to the power of the second integer
 
+## string_array
+this is a function that can be used to interact with string arrays
+### n operator
+this creates a new string array and returns it, for example:
+```
+string_array n "item1" "item2" "item3"
+var myArray c return
+```
+
+### g operator
+this gets 1 string from an array, it takes in the variable name and the index
+```
+string_array n "item1" "item2" "item3"
+var myArray c return
+string_array g myArray 0
+var element c return
+println !element
+# prints item1
+```
+
+### l operator
+this takes in 1 variable name and returns how many strings are in the string array
