@@ -191,3 +191,8 @@ println !element
 
 ### l operator
 this takes in 1 variable name and returns how many strings are in the string array
+
+## split
+takes in 2 arguments, a string and 1 character to act as the splitter, an optional third argument will be the maximum limit of splits
+
+returns a string array
