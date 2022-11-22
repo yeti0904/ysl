@@ -818,7 +818,7 @@ namespace YSL {
 					break;
 				}
 				default: {
-					env.Assert(false, "StringArray: Unknown operator " + args[1]);
+					env.Assert(false, "StringArray: Unknown operator " + args[0]);
 					break;
 				}
 			}
