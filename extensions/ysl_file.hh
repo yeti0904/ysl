@@ -7,7 +7,7 @@
 namespace YSL {
 	namespace Extensions {
 		namespace File {
-			std::vector <int> Read(std::vector <std::string> args, Environment& env) {
+			std::vector <int> Read(const std::vector <std::string>& args, Environment& env) {
 				if (args.size() < 1) {
 					fprintf(stderr, "File.Read: Needs at least 1 argument\n");
 					env.ExitError();
@@ -36,7 +36,7 @@ namespace YSL {
 
 				return ret;
 			}
-			std::vector <int> Write(std::vector <std::string> args, Environment& env) {
+			std::vector <int> Write(const std::vector <std::string>& args, Environment& env) {
 				if (args.size() < 2) {
 					fprintf(stderr, "File.Write: Needs at least 2 arguments\n");
 					env.ExitError();
@@ -47,7 +47,7 @@ namespace YSL {
 
 				return {};
 			}
-			std::vector <int> Flush(std::vector <std::string>, Environment&) {
+			std::vector <int> Flush(const std::vector <std::string>&, Environment&) {
 				fflush(stdout);
 				return {};
 			}

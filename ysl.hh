@@ -1,6 +1,7 @@
 #ifndef YSL_YSL_HH
 #define YSL_YSL_HH
 
+#include <string.h>
 #include <math.h>
 
 #include <map>
@@ -109,6 +110,15 @@ namespace YSL {
 
 			return ret;
 		}
+		std::vector <char*> StringVectorToCharpVector(std::vector <std::string> vec) {
+			std::vector <char*> ret;
+
+			for (auto& str : vec) {
+				ret.push_back(strdup(str.c_str()));
+			}
+
+			return ret;
+		}
 
 		std::vector <std::string> SplitString(
 		    std::string str, char splitter, ssize_t maxSplit
@@ -178,10 +188,10 @@ namespace YSL {
 
 
 	class Environment;
-	typedef std::vector <int> (*Function)(std::vector <std::string>, Environment&);
+	typedef std::vector <int> (*Function)(const std::vector <std::string>&, Environment&);
 
 	#define YSL_FUNCTION(F) \
-		std::vector <int> F(std::vector <std::string>, Environment&)
+		std::vector <int> F(const std::vector <std::string>&, Environment&)
 
 	class Extension {
 		public:
@@ -307,7 +317,7 @@ namespace YSL {
 				}
 			}
 
-			std::vector <std::string> AddVariables(std::vector <std::string> args) {
+			std::vector <std::string> AddVariables(const std::vector <std::string>& args) {
 				std::vector <std::string> ret;
 				for (auto& arg : args) {
 					if (arg[0] == '$') {
@@ -413,22 +423,22 @@ namespace YSL {
 	};
 	
 	namespace STD {
-		std::vector <int> Print(std::vector <std::string> args, Environment&) {
+		std::vector <int> Print(const std::vector <std::string>& args, Environment&) {
 			for (size_t i = 0; i < args.size(); ++i) {
 				printf("%s%s", args[i].c_str(), i == args.size() - 1? "" : " ");
 			}
 			return {};
 		}
-		std::vector <int> PrintLn(std::vector <std::string> args, Environment& env) {
+		std::vector <int> PrintLn(const std::vector <std::string>& args, Environment& env) {
 			Print(args, env);
 			puts("");
 			return {};
 		}
-		std::vector <int> Exit(std::vector <std::string>, Environment&) {
+		std::vector <int> Exit(const std::vector <std::string>&, Environment&) {
 			exit(0);
 			return {};
 		}
-		std::vector <int> Run(std::vector <std::string>, Environment& env) {
+		std::vector <int> Run(const std::vector <std::string>&, Environment& env) {
 			env.fromProgram = true;
 			for (env.lineAt = env.program.begin(); env.lineAt != env.program.end();) {
 				env.Interpret(env.lineAt->second);
@@ -441,7 +451,7 @@ namespace YSL {
 			env.fromProgram = false;
 			return {};
 		}
-		std::vector <int> Goto(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Goto(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 1, "Goto: needs 1 argument");
 			env.Assert(Util::IsInteger(args[0]), "Goto: argument must be integer");
 
@@ -457,7 +467,7 @@ namespace YSL {
 			exit(1);
 			return {};
 		}
-		std::vector <int> GotoIf(std::vector <std::string> args, Environment& env) {
+		std::vector <int> GotoIf(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 1, "GotoIf: needs 1 argument");
 
 			if (!env.returnValues.empty() && (env.returnValues.back()[0] != 0)) {
@@ -465,7 +475,7 @@ namespace YSL {
 			}
 			return {};
 		}
-		std::vector <int> GoSub(std::vector <std::string> args, Environment& env) {
+		std::vector <int> GoSub(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() >= 1, "GoSub: Needs at least 1 argument");
 		
 			env.calls.push_back(env.lineAt);
@@ -485,7 +495,7 @@ namespace YSL {
 			
 			return Goto(args, env);
 		}
-		std::vector <int> GoSubIf(std::vector <std::string> args, Environment& env) {
+		std::vector <int> GoSubIf(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() >= 1, "GoSubIf: Needs at least 1 argument");
 		
 			env.calls.push_back(env.lineAt);
@@ -505,19 +515,19 @@ namespace YSL {
 			
 			return GotoIf(args, env);
 		}
-		std::vector <int> Wait(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Wait(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 1, "Wait: needs 1 argument");
 			env.Assert(Util::IsInteger(args[0]), "Wait: argument must be integer");
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(stol(args[0])));
 			return {};
 		}
-		std::vector <int> Cmp(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Cmp(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 2, "Cmp: needs 2 arguments");
 
 			return {args[0] == args[1]? 1 : 0};
 		}
-		std::vector <int> Var(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Var(const std::vector <std::string>& args, Environment& env) {
 			if ((args.size() < 3) && !((args.size() > 1) && (args[1] == "p"))) {
 				env.Assert(false, "Var: needs at least 3 arguments");
 			}
@@ -673,7 +683,7 @@ namespace YSL {
 
 			return {};
 		}
-		std::vector <int> Load(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Load(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 1, "Load: needs 1 argument");
 
 			env.program.clear();
@@ -688,15 +698,15 @@ namespace YSL {
 			fhnd.close();
 			return {};
 		}
-		std::vector <int> Size(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Size(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 1, "Size: needs 1 argument");
 
 			return {(int) env.variables[args[0]].size()};
 		}
-		std::vector <int> Getch(std::vector <std::string>, Environment&) {
+		std::vector <int> Getch(const std::vector <std::string>&, Environment&) {
 			return {getchar()};
 		}
-		std::vector <int> Input(std::vector <std::string>, Environment&) {
+		std::vector <int> Input(const std::vector <std::string>&, Environment&) {
 			std::string input;
 			std::getline(std::cin, input, '\n');
 
@@ -707,21 +717,21 @@ namespace YSL {
 
 			return ret;
 		}
-		std::vector <int> Putch(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Putch(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 1, "Putch: needs 1 argument");
 			env.Assert(Util::IsInteger(args[0]), "Putch: requires integer argument");
 
 			putchar(stoi(args[0]));
 			return {};
 		}
-		std::vector <int> SetSize(std::vector <std::string> args, Environment& env) {
+		std::vector <int> SetSize(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 2, "SetSize: needs 2 arguments");
 
 			auto& arr = env.variables[args[0]];
 			arr.resize(stoi(args[1]));
 			return {};
 		}
-		std::vector <int> Return(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Return(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(!env.calls.empty(), "Return: nowhere to return to");
 		
 			if (args.size() < 1) {
@@ -738,18 +748,18 @@ namespace YSL {
 			env.calls.pop_back();
 			return {};
 		}
-		std::vector <int> Debug(std::vector <std::string>, Environment& env) {
+		std::vector <int> Debug(const std::vector <std::string>&, Environment& env) {
 			env.yslDebug = !env.yslDebug;
 			puts(std::to_string(env.yslDebug).c_str());
 			return {};
 		}
-		std::vector <int> Swap(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Swap(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 2, "Swap: needs 2 arguments");
 			
 			std::swap(env.variables[args[0]], env.variables[args[1]]);
 			return {};
 		}
-		std::vector <int> Gt(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Gt(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 2, "Gt: needs at least 2 arguments");
 			env.Assert(
 				Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
@@ -760,7 +770,7 @@ namespace YSL {
 				(stoi(args[0]) > stoi(args[1]))? 1 : 0
 			};
 		}
-		std::vector <int> Lt(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Lt(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 2, "Gt: needs 2 arguments");
 			env.Assert(
 				!Util::IsInteger(args[0]) || !Util::IsInteger(args[1]),
@@ -771,7 +781,7 @@ namespace YSL {
 				(stoi(args[0]) < stoi(args[1]))? 1 : 0
 			};
 		}
-		std::vector <int> Pow(std::vector <std::string> args, Environment& env) {
+		std::vector <int> Pow(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 2, "Pow: needs 2 arguments");
 			env.Assert(
 				Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
@@ -780,7 +790,7 @@ namespace YSL {
 
 			return {(int) pow((double) stoi(args[0]), (double) stoi(args[1]))};
 		}
-		std::vector <int> StringArray(std::vector <std::string> args, Environment& env) {
+		std::vector <int> StringArray(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() >= 2, "StringArray: Needs at least 2 arguments");
 		
 			switch (args[0][0]) {
@@ -824,6 +834,21 @@ namespace YSL {
 			}
 
 			return {};
+		}
+		std::vector <int> Split(const std::vector <std::string>& args, Environment& env) {
+			env.Assert(args.size() >= 2, "Split: Needs at least 2 arguments");
+
+			std::vector <std::string> splitted;
+			if (args.size() >= 2) {
+				env.Assert(Util::IsInteger(args[2]), "Split: max split must be integer");
+
+				splitted = Util::SplitString(args[0], args[1][0], stoi(args[2]));
+			}
+			else {
+				splitted = Util::SplitString(args[0], args[1][0], -1);
+			}
+
+			return Util::StringVectorToIntVector(splitted);
 		}
 	}
 }

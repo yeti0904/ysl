@@ -7,7 +7,7 @@
 namespace YSL {
 	namespace Extensions {
 		namespace Regex {
-			std::vector <int> Valid(std::vector <std::string> args, Environment& env) {
+			std::vector <int> Valid(const std::vector <std::string>& args, Environment& env) {
 				env.Assert(args.size() == 1, "Regex.Valid: Needs 1 argument");
 
 				try {
@@ -19,7 +19,7 @@ namespace YSL {
 
 				return {1};
 			}
-			std::vector <int> Match(std::vector <std::string> args, Environment& env) {
+			std::vector <int> Match(const std::vector <std::string>& args, Environment& env) {
 				env.Assert(args.size() == 2, "Regex.Match: Needs 2 arguments");
 
 				std::regex re;
