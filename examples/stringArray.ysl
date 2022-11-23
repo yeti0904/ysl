@@ -1,6 +1,7 @@
 string_array n "YSL" "is"
 var array c return
-string_array a array "cool"
+string_array a array "bad"
+string_array s array 2 "cool"
 var i = 0
 size array
 var arraySize f return

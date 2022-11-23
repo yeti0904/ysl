@@ -195,6 +195,20 @@ this takes in 1 variable name and returns how many strings are in the string arr
 ### a operator
 takes in a variable name and 1 string and appends the string to the array, returns nothing
 
+### s operator
+takes in a variable name, index and a string and overwrites the string at the index of the array
+
+example:
+```
+string_array n "item1" "item2" "item3"
+var myArray c return
+string_array s myArray 0 "foo"
+string_array g myArray 0
+var element c return
+println !return
+# prints foo
+```
+
 ## split
 takes in 2 arguments, a string and 1 character to act as the splitter, an optional third argument will be the maximum limit of splits
 

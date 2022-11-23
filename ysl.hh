@@ -339,6 +339,11 @@ namespace YSL {
 						ret.push_back(std::to_string((int) arg[1]));
 					}
 					else if (arg[0] == '*') {
+						if (arg.length() == 1) {
+							ret.push_back(arg);
+							continue;
+						}
+					
 						bool found = false;
 						for (auto it = program.begin(); it != program.end(); ++it) {
 							if (
@@ -835,6 +840,22 @@ namespace YSL {
 						env.variables[args[1]].push_back(ch);
 					}
 					env.variables[args[1]].push_back(0);
+					break;
+				}
+				case 's': {
+					env.Assert(
+						args.size() == 4, "StringArray: s operator needs 4 arguments"
+					);
+					env.Assert(
+						Util::IsInteger(args[2]), "StringArray: index must be integer"
+					);
+
+					auto array = Util::IntVectorToStringVector(env.variables[args[1]]);
+					array[stol(args[2])] = args[3];
+					env.variables[args[1]] = Util::StringVectorToIntVector(
+						array
+					);
+
 					break;
 				}
 				default: {
