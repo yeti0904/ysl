@@ -28,10 +28,11 @@
 namespace YSL {
 	namespace Util {
 		bool IsInteger(std::string str) {
-		    for (auto& ch : str) {
-		        if (!isdigit(ch)) {
-		            return false;
-		        }
+		    try {
+		    	stoi(str);
+		    }
+		    catch (...) {
+		    	return false;
 		    }
 		    return true;
 		}
