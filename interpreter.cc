@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
 		env.Interpret("run");
 	}
 	else {
+		puts("YSL example interpreter");
 		while (true) {
 			std::string input;
 			fputs("> ", stdout);

@@ -213,3 +213,10 @@ println !return
 takes in 2 arguments, a string and 1 character to act as the splitter, an optional third argument will be the maximum limit of splits
 
 returns a string array
+
+## not
+performs a NOT operation on a value, if no parameters are given it uses the last return value and it can also use a value from 1 parameter
+
+## and
+performs an AND operation on 2 values, if no parameters are given it uses the last 2 return values,
+ if 2 parameters are given it will use those 2 parameters

@@ -225,6 +225,8 @@ namespace YSL {
 		YSL_FUNCTION(Lt);
 		YSL_FUNCTION(Pow);
 		YSL_FUNCTION(StringArray);
+		YSL_FUNCTION(Not);
+		YSL_FUNCTION(And);
 	}
 
 	class Environment {
@@ -270,6 +272,8 @@ namespace YSL {
 				builtins["lt"]           = STD::Lt;
 				builtins["pow"]          = STD::Pow;
 				builtins["string_array"] = STD::StringArray;
+				builtins["not"]          = STD::Not;
+				builtins["and"]          = STD::And;
 
 				#ifdef YSL_PLATFORM_WINDOWS
 					variables["__platform"] = {1};
@@ -895,6 +899,45 @@ namespace YSL {
 			}
 
 			return Util::StringVectorToIntVector(splitted);
+		}
+		std::vector <int> Not(const std::vector <std::string>& args, Environment& env) {
+			if (args.empty()) {
+				auto ret = env.returnValues.back();
+				env.returnValues.pop_back();
+				return std::vector <int>{ret[0] == 0? 1 : 0};
+			}
+			else {
+				env.Assert(
+					args.size() == 1, "Not: Needs either no arguments or 1 argument"
+				);
+				env.Assert(Util::IsInteger(args[0]), "Not: Needs integer argument");
+
+				return std::vector <int>{stoi(args[0]) == 0? 1 : 0};
+			}
+		}
+		std::vector <int> And(const std::vector <std::string>& args, Environment& env) {
+			if (args.empty()) {
+				env.Assert(
+					env.returnValues.size() >= 2, "And: Needs at least 2 return items"
+				);
+				auto r1 = env.returnValues.back();
+				env.returnValues.pop_back();
+				auto r2 = env.returnValues.back();
+				env.returnValues.pop_back();
+				
+				return std::vector <int>{(r1[0] != 0) && (r2[0] != 0)};
+			}
+			else {
+				env.Assert(
+					args.size() == 2, "And: Needs either no arguments or 2 arguments"
+				);
+				env.Assert(
+					Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+					"And: Needs integer arguments"
+				);
+
+				return std::vector <int>{(stoi(args[0]) != 0) && (stoi(args[1]) != 0)};
+			}
 		}
 	}
 }
