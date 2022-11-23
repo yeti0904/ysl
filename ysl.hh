@@ -778,7 +778,7 @@ namespace YSL {
 		std::vector <int> Lt(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 2, "Gt: needs 2 arguments");
 			env.Assert(
-				!Util::IsInteger(args[0]) || !Util::IsInteger(args[1]),
+				Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
 				"Lt: needs integer arguments"
 			);
 
