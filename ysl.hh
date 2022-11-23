@@ -619,6 +619,10 @@ namespace YSL {
 						std::vector <int> {env.returnValues.back()} :
 						env.variables[args[2]];
 
+					if (args[2] == "return") {
+						env.returnValues.pop_back();
+					}
+
 					if (index >= arr.size()) {
 						fprintf(
 							stderr,
@@ -634,6 +638,11 @@ namespace YSL {
 				case 'c': {
 					auto arr = args[2] == "return"?
 						env.returnValues.back() : env.variables[args[2]];
+
+					if (args[2] == "return") {
+						env.returnValues.pop_back();
+					}
+					
 					env.variables[args[0]] = arr;
 					break;
 				}
