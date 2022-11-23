@@ -291,8 +291,8 @@ namespace YSL {
 			void ExitError() {
 				if (fromProgram) {
 					fprintf(stderr, "Exited at line %i\n", (int) lineAt->first);
-					exit(1);
 				}
+				exit(1);
 			}
 
 			void Assert(bool b, std::string error) {
