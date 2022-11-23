@@ -322,13 +322,18 @@ namespace YSL {
 				for (auto& arg : args) {
 					if (arg[0] == '$') {
 						if (variables[arg.substr(1)].empty()) {
-							fprintf(stderr, "No such variable: %s\n", arg.substr(1).c_str());
+							fprintf(stderr, "Empty variable: %s\n", arg.substr(1).c_str());
 							exit(1);
 						}
 
 						ret.push_back(std::to_string(variables[arg.substr(1)][0]));
 					}
 					else if (arg[0] == '!') {
+						if (variables[arg.substr(1)].empty()) {
+							fprintf(stderr, "Empty variable: %s\n", arg.substr(1).c_str());
+							exit(1);
+						}
+					
 						std::string value;
 						for (auto& ch : variables[arg.substr(1)]) {
 							value += ch;
@@ -537,14 +542,14 @@ namespace YSL {
 				env.Assert(false, "Var: needs at least 3 arguments");
 			}
 			
-			if (
+			/*if (
 				env.variables[args[0]].empty() &&
 				(args[1] != "=") && (args[1] != "f") && (args[1] != "c") &&
 				(args[1] != "p")
 			) {
 				fprintf(stderr, "Var: no such variable %s\n", args[0].c_str());
 				env.ExitError();
-			}
+			}*/
 
 			switch (args[1][0]) {
 				case '=': {
@@ -610,10 +615,10 @@ namespace YSL {
 						env.ExitError();
 					}
 
-					if (env.variables[args[2]].empty() && (args[2] != "return")) {
+					/*if (env.variables[args[2]].empty() && (args[2] != "return")) {
 						fprintf(stderr, "Var: no such variable %s\n", args[2].c_str());
 						env.ExitError();
-					}
+					}*/
 					size_t index = args.size() == 4? stol(args[3]) : 0;
 					auto   arr = args[2] == "return"?
 						std::vector <int> {env.returnValues.back()} :
