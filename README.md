@@ -98,7 +98,7 @@ var element f array 0
 println $element
 ```
 if the last argument is not given then the first element is used
-[E
+
 if a variable `return` is used then it uses the return value of the last returning function
 
 the c operation copies an entire array to a new array, like this:
@@ -191,6 +191,9 @@ println !element
 
 ### l operator
 this takes in 1 variable name and returns how many strings are in the string array
+
+### a operator
+takes in a variable name and 1 string and appends the string to the array, returns nothing
 
 ## split
 takes in 2 arguments, a string and 1 character to act as the splitter, an optional third argument will be the maximum limit of splits

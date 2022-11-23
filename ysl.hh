@@ -687,9 +687,9 @@ namespace YSL {
 			env.Assert(args.size() == 1, "Load: needs 1 argument");
 
 			env.program.clear();
-			std::ifstream             fhnd(args[0]);
-			std::string               line;
-			size_t                    lineNum = 10;
+			std::ifstream fhnd(args[0]);
+			std::string   line;
+			size_t        lineNum = 10;
 
 			while (getline(fhnd, line)) {
 				env.program[lineNum] =  line;
@@ -825,6 +825,16 @@ namespace YSL {
 					auto array = Util::IntVectorToStringVector(env.variables[args[1]]);
 
 					return {(int) array.size()};
+					break;
+				}
+				case 'a': {
+					env.Assert(
+						args.size() == 3, "StringArray: a operator needs 3 arguments"
+					);
+					for (auto& ch : args[2]) {
+						env.variables[args[1]].push_back(ch);
+					}
+					env.variables[args[1]].push_back(0);
 					break;
 				}
 				default: {
