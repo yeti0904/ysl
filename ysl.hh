@@ -227,6 +227,7 @@ namespace YSL {
 		YSL_FUNCTION(StringArray);
 		YSL_FUNCTION(Not);
 		YSL_FUNCTION(And);
+		YSL_FUNCTION(Split);
 	}
 
 	class Environment {
@@ -274,6 +275,7 @@ namespace YSL {
 				builtins["string_array"] = STD::StringArray;
 				builtins["not"]          = STD::Not;
 				builtins["and"]          = STD::And;
+				builtins["split"]        = STD::Split;
 
 				#ifdef YSL_PLATFORM_WINDOWS
 					variables["__platform"] = {1};
@@ -328,7 +330,7 @@ namespace YSL {
 					if (arg[0] == '$') {
 						if (variables[arg.substr(1)].empty()) {
 							fprintf(stderr, "Empty variable: %s\n", arg.substr(1).c_str());
-							exit(1);
+							ExitError();
 						}
 
 						ret.push_back(std::to_string(variables[arg.substr(1)][0]));
@@ -336,7 +338,7 @@ namespace YSL {
 					else if (arg[0] == '!') {
 						if (variables[arg.substr(1)].empty()) {
 							fprintf(stderr, "Empty variable: %s\n", arg.substr(1).c_str());
-							exit(1);
+							ExitError();
 						}
 					
 						std::string value;
@@ -347,6 +349,9 @@ namespace YSL {
 					}
 					else if (arg[0] == '&') {
 						ret.push_back(std::to_string((int) arg[1]));
+					}
+					else if (arg[0] == '\\') {
+						ret.push_back(arg.substr(1));
 					}
 					else if (arg[0] == '*') {
 						if (arg.length() == 1) {
@@ -393,6 +398,8 @@ namespace YSL {
 				if (parts.empty()) {
 					return;
 				}
+				parts[0] = AddVariables(std::vector <std::string>{parts[0]})[0];
+				
 				if (Util::IsInteger(parts[0])) {
 					if (parts.size() == 1) {
 						program.erase(stoi(parts[0]));

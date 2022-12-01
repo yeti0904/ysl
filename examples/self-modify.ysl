@@ -1,0 +1,9 @@
+var i = 500
+loop:
+	var i + 10
+	cmp $i 1000
+	goto_if *done
+	$i println hi
+	goto *loop
+done:
+	goto 510

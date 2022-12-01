@@ -3,6 +3,7 @@
 
 #include "../ysl.hh"
 #include <unistd.h>
+#include <sys/wait.h>
 
 #ifdef YSL_PLATFORM_WINDOWS
 	#error "Posix extension is being used on windows"
@@ -68,6 +69,12 @@ namespace YSL {
 
 				return {};
 			}
+			std::vector <int> Fork(const std::vector <std::string>&, Environment&) {
+				return {fork()};
+			}
+			std::vector <int> Wait(const std::vector <std::string>&, Environment&) {
+				return {wait(nullptr)};
+			}
 
 			YSL::Extension BuildExtension() {
 				YSL::Extension ext;
@@ -76,7 +83,9 @@ namespace YSL {
 				ext.functions["execv"]   = Execv;
 				ext.functions["execvp"]  = Execvp;
 				ext.functions["execvpe"] = Execvpe;
-
+				ext.functions["fork"]    = Fork;
+				ext.functions["wait"]    = Wait;
+				
 				return ext;
 			}
 		}

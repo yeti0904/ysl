@@ -1,0 +1,28 @@
+mainloop:
+	print "\$ "
+	input
+	var in c return
+	split !in " "
+	var in c return
+
+	string_array g in 0
+	var cmd c return
+
+	posix.fork
+	var pid f return
+	cmp $pid 0
+	goto_if *child
+	cmp $pid -1
+	goto_if *error
+	goto *parent
+
+child:
+	posix.execvp !cmd in
+
+error:
+	println "error"
+	goto *mainloop
+
+parent:
+	posix.wait
+	goto *mainloop
