@@ -128,6 +128,7 @@ namespace YSL {
 		    std::string               reading;
 		    std::vector <std::string> ret;
 		    bool                      inString = false;
+		    bool                      lastWasString = false;
 		    
 		    for (size_t i = 0; i <= str.length(); ++i) {
 		    	if (inString && str[i] == '\\') {
@@ -161,6 +162,9 @@ namespace YSL {
 		    	}
 		    	if ((str[i] == '"') && ((maxSplit < 0) || (splits < maxSplit - 1))) {
 		    		inString = !inString;
+		    		if (!inString) {
+		    			lastWasString = true;
+		    		}
 		    		continue;
 		    	}
 		    	
@@ -169,11 +173,12 @@ namespace YSL {
 		        	(str[i] == '\0')
 		        ) {
 		            if ((maxSplit < 0) || (splits < maxSplit - 1) || (str[i] == '\0')) {
-		                if (reading == "") {
+		                if ((reading == "") && !lastWasString) {
 		                    continue;
 		                }
 		                ret.push_back(reading);
-		                reading = "";
+		                lastWasString = false;
+		                reading       = "";
 		                ++ splits;
 		                continue;
 		            }
@@ -228,6 +233,7 @@ namespace YSL {
 		YSL_FUNCTION(Not);
 		YSL_FUNCTION(And);
 		YSL_FUNCTION(Split);
+		YSL_FUNCTION(Or);
 	}
 
 	class Environment {
@@ -276,6 +282,7 @@ namespace YSL {
 				builtins["not"]          = STD::Not;
 				builtins["and"]          = STD::And;
 				builtins["split"]        = STD::Split;
+				builtins["or"]           = STD::Or;
 
 				#ifdef YSL_PLATFORM_WINDOWS
 					variables["__platform"] = {1};
@@ -944,6 +951,30 @@ namespace YSL {
 				);
 
 				return std::vector <int>{(stoi(args[0]) != 0) && (stoi(args[1]) != 0)};
+			}
+		}
+		std::vector <int> Or(const std::vector <std::string>& args, Environment& env) {
+			if (args.empty()) {
+				env.Assert(
+					env.returnValues.size() >= 2, "Or: Needs at least 2 return items"
+				);
+				auto r1 = env.returnValues.back();
+				env.returnValues.pop_back();
+				auto r2 = env.returnValues.back();
+				env.returnValues.pop_back();
+				
+				return std::vector <int>{(r1[0] != 0) || (r2[0] != 0)};
+			}
+			else {
+				env.Assert(
+					args.size() == 2, "Or: Needs either no arguments or 2 arguments"
+				);
+				env.Assert(
+					Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+					"Or: Needs integer arguments"
+				);
+
+				return std::vector <int>{(stoi(args[0]) != 0) || (stoi(args[1]) != 0)};
 			}
 		}
 	}
