@@ -64,7 +64,15 @@ namespace YSL {
 			}
 			
 			size_t start = str.find_first_not_of(' ');
-			size_t end   = str.find_last_not_of(' ') + 1;
+			size_t end   = str.find_last_not_of(' ');
+
+			if (start == std::string::npos) {
+				start = 0;
+			}
+			else if (start == std::string::npos) {
+				end = str.length() - 1;
+			}
+			
 			return str.substr(start, end - start);
 		}
 
@@ -900,7 +908,7 @@ namespace YSL {
 					);
 
 					auto array = Util::IntVectorToStringVector(env.variables[args[1]]);
-					array.erase(array.begin() + args[2]);
+					array.erase(array.begin() + stoi(args[2]));
 					env.variables[args[1]] = Util::StringVectorToIntVector(
 						array
 					);
