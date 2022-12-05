@@ -343,10 +343,10 @@ namespace YSL {
 						ret.push_back(std::to_string(variables[arg.substr(1)][0]));
 					}
 					else if (arg[0] == '!') {
-						if (variables[arg.substr(1)].empty()) {
+						/*if (variables[arg.substr(1)].empty()) {
 							fprintf(stderr, "Empty variable: %s\n", arg.substr(1).c_str());
 							ExitError();
-						}
+						}*/
 					
 						std::string value;
 						for (auto& ch : variables[arg.substr(1)]) {
