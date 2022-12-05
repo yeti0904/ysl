@@ -209,6 +209,9 @@ println !return
 # prints foo
 ```
 
+### r operator
+takes in a variable name, index and it removes the element at index from the array
+
 ## split
 takes in 2 arguments, a string and 1 character to act as the splitter, an optional third argument will be the maximum limit of splits
 
@@ -219,4 +222,8 @@ performs a NOT operation on a value, if no parameters are given it uses the last
 
 ## and
 performs an AND operation on 2 values, if no parameters are given it uses the last 2 return values,
+ if 2 parameters are given it will use those 2 parameters
+
+## or
+performs an OR operation on 2 values, if no parameters are given it uses the last 2 return values,
  if 2 parameters are given it will use those 2 parameters

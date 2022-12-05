@@ -891,6 +891,22 @@ namespace YSL {
 
 					break;
 				}
+				case 'r': {
+					env.Assert(
+						args.size() == 2, "StringArray: s operator needs 3 arguments"
+					);
+					env.Assert(
+						Util::IsInteger(args[2]), "StringArray: index must be integer"
+					);
+
+					auto array = Util::IntVectorToStringVector(env.variables[args[1]]);
+					array.erase(array.begin() + args[2]);
+					env.variables[args[1]] = Util::StringVectorToIntVector(
+						array
+					);
+
+					break;
+				}
 				default: {
 					env.Assert(false, "StringArray: Unknown operator " + args[0]);
 					break;
