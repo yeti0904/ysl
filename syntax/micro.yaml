@@ -5,7 +5,9 @@ detect:
 
 rules:
     - statement: "\\b(print|println|exit|run|goto|goto_if|wait|cmp|var|load|size)\\b"
-    - statement: "\\b(getch|input|putch|set_size|gosub|gosub_if|return)\\b"
+    - statement: "\\b(getch|input|putch|set_size|gosub|gosub_if|return|swap|gt|lt)\\b"
+    - statement: "\\b(string_array|not|and|split|or|is_num|atoi|itoa|load_end)\\b"
+    - statement: "\\b([A-Za-z0-9]*\\.[A-Za-z0-9]*)\\b"
     - identifier: "\\$\\{?[0-9A-Za-z_!@#$*?-]+\\}?"
     - identifier: "\\$\\{?[0-9A-Za-z_!@#$*?-]+\\}?"
     - identifier: "\\*\\{?[0-9A-Za-z_!@#$*?-]+\\}?"

@@ -1,0 +1,7 @@
+load_end "examples/functions.ysl"
+
+gosub *giveHello
+var hello c return
+println !hello
+
+exit

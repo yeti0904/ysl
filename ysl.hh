@@ -230,6 +230,10 @@ namespace YSL {
 		YSL_FUNCTION(And);
 		YSL_FUNCTION(Split);
 		YSL_FUNCTION(Or);
+		YSL_FUNCTION(IsNum);
+		YSL_FUNCTION(Atoi);
+		YSL_FUNCTION(Itoa);
+		YSL_FUNCTION(LoadEnd);
 	}
 
 	class Environment {
@@ -279,6 +283,10 @@ namespace YSL {
 				builtins["and"]          = STD::And;
 				builtins["split"]        = STD::Split;
 				builtins["or"]           = STD::Or;
+				builtins["is_num"]       = STD::IsNum;
+				builtins["atoi"]         = STD::Atoi;
+				builtins["itoa"]         = STD::Itoa;
+				builtins["load_end"]     = STD::LoadEnd;
 
 				#ifdef YSL_PLATFORM_WINDOWS
 					variables["__platform"] = {1};
@@ -988,6 +996,46 @@ namespace YSL {
 
 				return std::vector <int>{(stoi(args[0]) != 0) || (stoi(args[1]) != 0)};
 			}
+		}
+		std::vector <int> IsNum(const std::vector <std::string>& args, Environment& env) {
+			env.Assert(args.empty(), "IsNum: Needs 1 argument");
+
+			return std::vector <int>{Util::IsInteger(args[0])? 1 : 0};
+		}
+		std::vector <int> Atoi(const std::vector <std::string>& args, Environment& env) {
+			env.Assert(!args.empty(), "Atoi: Needs 1 argument");
+			env.Assert(
+				Util::IsInteger(args[0]), "Atoi: String must be numeric"
+			);
+
+			return std::vector <int>{stoi(args[0])};
+		}
+		std::vector <int> Itoa(const std::vector <std::string>& args, Environment& env) {
+			env.Assert(!args.empty(), "Itoa: needs 1 argument");
+			env.Assert(Util::IsInteger(args[0]), "Itoa: needs integer arguments");
+
+			return Util::StringToIntVector(args[0]);
+		}
+		std::vector <int> LoadEnd(const std::vector <std::string>& args, Environment& env) {
+			env.Assert(args.size() == 1, "LoadEnd: needs 1 argument");
+
+			std::ifstream fhnd(args[0]);
+
+			env.Assert(fhnd.good(), "LoadEnd: Failed to read file: " + args[0]);
+			
+			std::string   line;
+			size_t        lineNum = 10;
+
+			if (!env.program.empty()) {
+				lineNum += env.program.rbegin()->first;
+			}
+
+			while (getline(fhnd, line)) {
+				env.program[lineNum] =  line;
+				lineNum              += 10;
+			}
+			fhnd.close();
+			return {};
 		}
 	}
 }

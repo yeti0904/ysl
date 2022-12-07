@@ -227,3 +227,17 @@ performs an AND operation on 2 values, if no parameters are given it uses the la
 ## or
 performs an OR operation on 2 values, if no parameters are given it uses the last 2 return values,
  if 2 parameters are given it will use those 2 parameters
+
+## is_num
+takes in 1 string argument, and returns true if it is numerical, false if not
+
+## atoi
+takes in 1 numeric string and returns that string as 1 integer
+
+## itoa
+takes in 1 integer, and returns it as a string
+
+## load_end
+loads a file relative to the current working directory at the end of program memory
+
+can be used for including files, like in C programs
