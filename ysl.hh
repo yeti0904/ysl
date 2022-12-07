@@ -394,7 +394,7 @@ namespace YSL {
 			void Interpret(std::string code) {
 				code = Util::StringReplace(code, '\t', ' ');
 			
-				if (code[0] == '#') {
+				if (Util::TrimString(code)[0] == '#') {
 					return; // comment
 				}
 				auto parts = Util::SplitString(code, ' ', -1);

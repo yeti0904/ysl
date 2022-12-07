@@ -1,5 +1,6 @@
-# does not work
+# written by chat GPT :sob:
 
+# initialize list and list size
 var list = 7 9 6 8 4 3 7 9 2 7 4 8 1 4 8 5 9
 size list
 var listSz f return
@@ -9,50 +10,82 @@ var listSz - 1
 goto *pass
 
 pass:
-	var i = 0
-	goto *loop
-loop:
-	var changesMade = 0
-	var i2 = $i
-	var i2 + 1
-	var e1 f list $i
-	var e2 f list $i2
+    # initialize index and changesMade flag
+    var i = 0
+    var changesMade = 0
 
-	gt $e1 $e2
-	goto_if *swap
-	goto *continue
+    # loop through the list
+    goto *loop
+
+loop:
+    # get elements at current and next index
+    var i2 = $i
+    var i2 + 1
+    var e1 f list $i
+    var e2 f list $i2
+
+    # check if elements are out of order
+    gt $e1 $e2
+    goto_if *swap
+
+    # elements are in order, continue to next iteration
+    goto *continue
 
 continue:
-	var i + 1
-	cmp $i $listSz
-	goto_if *nextStage
-	goto *loop
+    # increment index
+    var i + 1
+
+    # check if we have reached the end of the list
+    cmp $i $listSz
+    goto_if *nextStage
+
+    # continue to next iteration
+    goto *loop
 
 swap:
-	swap e1 e2
-	var list s $i $e1
-	var list s $i2 $e2
-	var changesMade = 1
-	goto *continue
+    # swap elements
+    swap e1 e2
+    var list s $i $e1
+    var list s $i2 $e2
+
+    # set changesMade flag
+    var changesMade = 1
+
+    # continue to next iteration
+    goto *continue
 
 nextStage:
-	cmp $changesMade 0
-	goto_if *display
-	goto *pass
+    # check if any changes were made in this pass
+    cmp $changesMade 0
+    goto_if *display
+
+    # start next pass
+    goto *pass
 
 display:
-	var listSz + 1
-	var i = 0
-	goto *displayLoop
+    # initialize index for display
+    var i = 0
+
+    # display loop
+    goto *displayLoop
 
 displayLoop:
-	var it f list $i
-	println $it
+    # get element at current index
+    var it f list $i
 
-	var i + 1
-	cmp $i $listSz
-	goto_if *end
-	goto *displayLoop
+    # print element
+    println $it
+
+    # increment index
+    var i + 1
+
+    # check if we have reached the end of the list
+    cmp $i $listSz
+    goto_if *end
+
+    # continue to next iteration
+    goto *displayLoop
 
 end:
-	exit
+    # exit program
+    exit
