@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include <map>
+#include <regex>
 #include <string>
 #include <vector>
 #include <chrono>
@@ -59,21 +60,8 @@ namespace YSL {
 		}
 
 		std::string TrimString(std::string str) {
-			if (str.empty()) {
-				return str;
-			}
-			
-			size_t start = str.find_first_not_of(' ');
-			size_t end   = str.find_last_not_of(' ');
-
-			if (start == std::string::npos) {
-				start = 0;
-			}
-			else if (start == std::string::npos) {
-				end = str.length() - 1;
-			}
-			
-			return str.substr(start, end - start);
+			// an improved version of this https://stackoverflow.com/a/58773060
+			return std::regex_replace(str, std::regex("^ +| +$"),"");
 		}
 
 		std::vector <int> StringToIntVector(std::string str) {
