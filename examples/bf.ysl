@@ -1,0 +1,124 @@
+# initialize brainfuck program and program pointer
+var prog = ,[.,]
+var progPtr = 0
+
+# initialize data array and data pointer
+var data = 0 0 0 0 0 0 0 0 0 0
+var dataPtr = 0
+
+# start interpreter loop
+goto *loop
+
+loop:
+    # get current instruction
+    var instr f prog $progPtr
+
+    # check instruction type
+    cmp $instr ,
+    goto_if *comma
+    cmp $instr .
+    goto_if *dot
+    cmp $instr [
+    goto_if *leftBracket
+    cmp $instr ]
+    goto_if *rightBracket
+    cmp $instr <
+    goto_if *leftArrow
+    cmp $instr >
+    goto_if *rightArrow
+    cmp $instr +
+    goto_if *plus
+    cmp $instr -
+    goto_if *minus
+
+    # invalid instruction, exit program
+    exit
+
+comma:
+    # read input and store in current data element
+    var input =
+    var data s $dataPtr $input
+
+    # continue to next instruction
+    goto *nextInstr
+
+dot:
+    # output current data element
+    var output f data $dataPtr
+    println $output
+
+    # continue to next instruction
+    goto *nextInstr
+
+leftBracket:
+    # check if current data element is 0
+    var dataVal f data $dataPtr
+    cmp $dataVal 0
+    goto_if *rightBracket
+
+    # skip to matching bracket
+    var bracketCount = 1
+    var progPtr + 1
+    goto *leftBracketLoop
+
+leftBracketLoop:
+    # get current instruction
+    var instr f prog $progPtr
+
+    # check instruction type
+    cmp $instr [
+    goto_if *leftBracketInc
+    cmp $instr ]
+    goto_if *rightBracketDec
+
+    # continue to next instruction
+    goto *nextInstr
+
+leftBracketInc:
+    # increment bracket count
+    var bracketCount + 1
+
+    # continue to next instruction
+    goto *nextInstr
+
+rightBracketDec:
+    # decrement bracket count
+    var bracketCount - 1
+
+    # check if we have found the matching bracket
+    cmp $bracketCount 0
+    goto_if *nextInstr
+
+    # continue to next instruction
+    goto *nextInstr
+
+rightBracket:
+    # check if current data element is non-zero
+    var dataVal f data $dataPtr
+    cmp $dataVal 0
+    goto_if *nextInstr
+
+    # skip to matching bracket
+    var bracketCount = 1
+    var progPtr - 1
+    goto *rightBracketLoop
+
+rightBracketLoop:
+    # get current instruction
+    var instr f prog $progPtr
+
+    # check instruction type
+    cmp $instr ]
+    goto_if *rightBracketInc
+    cmp $instr [
+    goto_if *leftBracketDec
+
+    # continue to previous instruction
+    goto *prevInstr
+
+rightBracketInc:
+    # increment bracket count
+    var bracketCount + 1
+
+    # continue to previous instruction
+    goto *prevInstr

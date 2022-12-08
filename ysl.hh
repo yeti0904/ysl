@@ -897,7 +897,7 @@ namespace YSL {
 				}
 				case 'r': {
 					env.Assert(
-						args.size() == 2, "StringArray: s operator needs 3 arguments"
+						args.size() == 2, "StringArray: r operator needs 2 arguments"
 					);
 					env.Assert(
 						Util::IsInteger(args[2]), "StringArray: index must be integer"
