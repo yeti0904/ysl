@@ -16,7 +16,7 @@ int main() {
 ```
 
 ## syntax
-\# for commands
+\# for comments
 
 function calls:
 
