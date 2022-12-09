@@ -526,7 +526,7 @@ namespace YSL {
 				}
 			}
 			
-			return Goto(args, env);
+			return Goto({args[0]}, env);
 		}
 		std::vector <int> GoSubIf(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() >= 1, "GoSubIf: Needs at least 1 argument");
@@ -546,7 +546,7 @@ namespace YSL {
 				}
 			}
 			
-			return GotoIf(args, env);
+			return GotoIf({args[0]}, env);
 		}
 		std::vector <int> Wait(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() == 1, "Wait: needs 1 argument");
