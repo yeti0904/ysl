@@ -393,15 +393,18 @@ namespace YSL {
 						bool found = false;
 						if (arg[1] == '.') { // sub-label
 							auto it2 = lineAt;
-							while (
-								(it2 != program.begin()) && (
-									it2->second[it2->second.length() - 1] != ':'
-								) &&
-								(Util::TrimString(it2->second)[0] != '.')
-							) {
+							puts("sub-label");
+							while (it2 != program.begin()) {
 								-- it2;
-								/*printf("%s (%c)\n",
-								it2->second.c_str(),
+								if (
+									(it2->second[it2->second.length() - 1] == ':') &&
+									(Util::TrimString(it2->second)[0] != '.')
+								) {
+									break;
+								}
+								/*printf("%s (%c)(%c)\n",
+								Util::TrimString(it2->second).c_str(),
+								it2->second[0],
 								it2->second[it2->second.length() - 1]
 								);*/
 							}
