@@ -316,10 +316,11 @@ namespace YSL {
 				if (fromProgram) {
 					if (showExit) {
 						fprintf(
-							stderr, "Exited at line %i\n\t%s\n",
-							(int) lineAt->first, lineAt->second.c_str()
+							stderr, "Exited at line %i\n",
+							(int) lineAt->first
 						);
 					}
+					fprintf(stderr, "\t%s\n", lineAt->second.c_str());
 					fprintf(stderr, "backtrace:\n");
 					for (size_t i = 0; i < calls.size(); ++i) {
 						fprintf(
