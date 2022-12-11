@@ -312,12 +312,15 @@ namespace YSL {
 				variables["__platform_unknown"] = {5};
 			}
 
-			void ExitError() {
+			void ExitError(bool showExit = true) {
 				if (fromProgram) {
-					fprintf(
-						stderr, "Exited at line %i\n\t%s\nbacktrace:\n",
-						(int) lineAt->first, lineAt->second.c_str()
-					);
+					if (showExit) {
+						fprintf(
+							stderr, "Exited at line %i\n\t%s\n",
+							(int) lineAt->first, lineAt->second.c_str()
+						);
+					}
+					fprintf(stderr, "backtrace:\n");
 					for (size_t i = 0; i < calls.size(); ++i) {
 						fprintf(
 							stderr, "#%lli: %s\n", (long long int) i,
@@ -480,7 +483,7 @@ namespace YSL {
 								stderr, "Crashed at line %i\n", (int) lineAt->first
 							);
 							fprintf(stderr, "Error: %s\n", e.what());
-							exit(1);
+							ExitError(false);
 						}
 					}
 					if (!ret.empty()) {
