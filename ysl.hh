@@ -314,7 +314,10 @@ namespace YSL {
 
 			void ExitError() {
 				if (fromProgram) {
-					fprintf(stderr, "Exited at line %i\n", (int) lineAt->first);
+					fprintf(
+						stderr, "Exited at line %i\n\t%s\n",
+						(int) lineAt->first, lineAt->second.c_str()
+					);
 				}
 				exit(1);
 			}
