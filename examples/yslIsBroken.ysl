@@ -1,0 +1,13 @@
+goto *main
+
+atoi:
+	var lol p
+	return lol
+
+main:
+	input
+	var in c return
+	gosub *atoi !in
+	var ret f return
+	println $ret
+	exit
