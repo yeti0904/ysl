@@ -315,9 +315,15 @@ namespace YSL {
 			void ExitError() {
 				if (fromProgram) {
 					fprintf(
-						stderr, "Exited at line %i\n\t%s\n",
+						stderr, "Exited at line %i\n\t%s\nbacktrace:\n",
 						(int) lineAt->first, lineAt->second.c_str()
 					);
+					for (size_t i = 0; i < calls.size(); ++i) {
+						fprintf(
+							stderr, "#%lli: %s\n", (long long int) i,
+							calls[i]->second.c_str()
+						);
+					}
 				}
 				exit(1);
 			}
