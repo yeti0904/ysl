@@ -396,7 +396,8 @@ namespace YSL {
 							while (
 								(it2 != program.begin()) && (
 									it2->second[it2->second.length() - 1] != ':'
-								)
+								) &&
+								(Util::TrimString(it2->second)[0] != '.')
 							) {
 								-- it2;
 								/*printf("%s (%c)\n",
