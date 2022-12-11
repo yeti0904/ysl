@@ -1033,7 +1033,7 @@ namespace YSL {
 			}
 		}
 		std::vector <int> IsNum(const std::vector <std::string>& args, Environment& env) {
-			env.Assert(args.empty(), "IsNum: Needs 1 argument");
+			env.Assert(args.size() == 1, "IsNum: Needs 1 argument");
 
 			return std::vector <int>{Util::IsInteger(args[0])? 1 : 0};
 		}
