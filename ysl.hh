@@ -393,7 +393,6 @@ namespace YSL {
 						bool found = false;
 						if (arg[1] == '.') { // sub-label
 							auto it2 = lineAt;
-							puts("sub-label");
 							while (it2 != program.begin()) {
 								-- it2;
 								if (
