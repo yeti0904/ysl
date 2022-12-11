@@ -1,0 +1,18 @@
+goto *main
+
+thing1:
+	goto *.sub
+	.sub:
+		println "thing1.sub"
+		return
+
+thing2:
+	goto *.sub
+	.sub:
+		println "thing2.sub"
+		return
+
+main:
+	gosub *thing1
+	gosub *thing2
+	exit

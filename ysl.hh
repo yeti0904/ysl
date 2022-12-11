@@ -1,8 +1,9 @@
 #ifndef YSL_YSL_HH
 #define YSL_YSL_HH
 
-#include <string.h>
 #include <math.h>
+#include <ctype.h>
+#include <string.h>
 
 #include <map>
 #include <regex>
@@ -60,8 +61,13 @@ namespace YSL {
 		}
 
 		std::string TrimString(std::string str) {
-			// an improved version of this https://stackoverflow.com/a/58773060
-			return std::regex_replace(str, std::regex("^ +| +$"),"");
+			// too lazy to make it trim the end too
+			for (size_t i = 0; i < str.length(); ++i) {
+				if (!isspace(str[i])) {
+					return str.substr(i, str.length() - i);
+				}
+			}
+			return str;
 		}
 
 		std::vector <int> StringToIntVector(std::string str) {
@@ -369,9 +375,29 @@ namespace YSL {
 							ret.push_back(arg);
 							continue;
 						}
-					
+
+						auto it = program.begin();
 						bool found = false;
-						for (auto it = program.begin(); it != program.end(); ++it) {
+						if (arg[1] == '.') { // sub-label
+							auto it2 = lineAt;
+							while (
+								(it2 != program.begin()) && (
+									it2->second[it2->second.length() - 1] != ':'
+								)
+							) {
+								-- it2;
+								/*printf("%s (%c)\n",
+								it2->second.c_str(),
+								it2->second[it2->second.length() - 1]
+								);*/
+							}
+							it = it2;
+						}
+					
+						for (; it != program.end(); ++it) {
+							if (found) {
+								break;
+							}
 							if (
 								Util::StringStartsWith(
 									Util::TrimString(it->second), arg.substr(1) + ':'
