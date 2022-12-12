@@ -240,6 +240,7 @@ namespace YSL {
 		YSL_FUNCTION(Atoi);
 		YSL_FUNCTION(Itoa);
 		YSL_FUNCTION(LoadEnd);
+		YSL_FUNCTION(Error);
 	}
 
 	class Environment {
@@ -293,6 +294,7 @@ namespace YSL {
 				builtins["atoi"]         = STD::Atoi;
 				builtins["itoa"]         = STD::Itoa;
 				builtins["load_end"]     = STD::LoadEnd;
+				builtins["error"]        = STD::Error;
 
 				#ifdef YSL_PLATFORM_WINDOWS
 					variables["__platform"] = {1};
@@ -1077,6 +1079,10 @@ namespace YSL {
 				lineNum              += 10;
 			}
 			fhnd.close();
+			return {};
+		}
+		std::vector <int> Error(const std::vector <std::string>&, Environment& env) {
+			env.ExitError();
 			return {};
 		}
 	}

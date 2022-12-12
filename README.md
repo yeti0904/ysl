@@ -243,3 +243,8 @@ takes in 1 integer, and returns it as a string
 loads a file relative to the current working directory at the end of program memory
 
 can be used for including files, like in C programs
+
+## error
+takes no arguments
+
+prints out where it was called + a backtrace
