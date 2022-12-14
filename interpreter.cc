@@ -9,6 +9,10 @@
 	#include "extensions/ysl_posix.hh"
 #endif
 
+#ifndef YSL_VERSION
+	#define YSL_VERSION "Unknown"
+#endif
+
 int main(int argc, char** argv) {
 	YSL::Environment env;
 
@@ -21,6 +25,10 @@ int main(int argc, char** argv) {
 	#endif
 
 	if (argc > 1) {
+		if (std::string(argv[1]) == "--version") {
+			printf("Version: %s\n", YSL_VERSION);
+		}
+	
 		env.Interpret(std::string("load ") + argv[1]);
 		env.Interpret("run");
 	}
