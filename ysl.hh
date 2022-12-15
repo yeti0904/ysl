@@ -574,8 +574,10 @@ namespace YSL {
 		}
 		std::vector <int> GoSubIf(const std::vector <std::string>& args, Environment& env) {
 			env.Assert(args.size() >= 1, "GoSubIf: Needs at least 1 argument");
-		
-			env.calls.push_back(env.lineAt);
+
+			if (!env.returnValues.empty() && (env.returnValues.back()[0] != 0)) {
+				env.calls.push_back(env.lineAt);
+			}
 
 			for (size_t i = 1; i < args.size(); ++i) {
 				if (Util::IsInteger(args[i])) {
