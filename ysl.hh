@@ -241,6 +241,7 @@ namespace YSL {
 		YSL_FUNCTION(Itoa);
 		YSL_FUNCTION(LoadEnd);
 		YSL_FUNCTION(Error);
+		YSL_FUNCTION(Sqrt);
 	}
 
 	class Environment {
@@ -295,6 +296,7 @@ namespace YSL {
 				builtins["itoa"]         = STD::Itoa;
 				builtins["load_end"]     = STD::LoadEnd;
 				builtins["error"]        = STD::Error;
+				builtins["sqrt"]         = STD::Sqrt;
 
 				#ifdef YSL_PLATFORM_WINDOWS
 					variables["__platform"] = {1};
@@ -678,6 +680,16 @@ namespace YSL {
 					);
 				
 					env.variables[args[0]][0] %= stoi(args[2]);
+					break;
+				}
+				case '^': {
+					env.Assert(
+						Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+					);
+
+					env.variables[args[0]][0] = (int) pow(
+						(double) env.variables[args[0]][0], (double) stoi(args[2])
+					);
 					break;
 				}
 				case 'f': {
@@ -1088,6 +1100,12 @@ namespace YSL {
 		std::vector <int> Error(const std::vector <std::string>&, Environment& env) {
 			env.ExitError();
 			return {};
+		}
+		std::vector <int> Sqrt(const std::vector <std::string>& args, Environment& env) {
+			env.Assert(args.size() == 1, "Sqrt: Requires 1 argument");
+			env.Assert(Util::IsInteger(args[0]), "Sqrt: Requires integer argument");
+
+			return {(int) round(sqrt((double) stoi(args[0])))};
 		}
 	}
 }

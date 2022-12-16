@@ -88,7 +88,7 @@ var varname = element1 element2 element3
 ```
 ^ assigning variables, elements must be integers
 
-other operations include: +, -, *, /, %
+other operations include: +, -, *, /, %, ^
 
 these operations will only be performed on the variable's first element
 
@@ -247,4 +247,7 @@ can be used for including files, like in C programs
 ## error
 takes no arguments
 
-prints out where it was called + a backtrace
+prints out where it was called + a backtrace and exits
+
+## sqrt
+takes in 1 integer argument and computes the square root
