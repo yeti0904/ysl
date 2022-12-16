@@ -9,4 +9,7 @@ SRC = interpreter.cc
 OUT = ysl
 
 build:
-	$(CXX) $(SRC) -DYSL_VERSION='$(VER)' -o $(OUT)
+	$(CXX) $(SRC) -DYSL_VERSION='$(VER)' -o $(OUT) -g
+
+install:
+	cp $(OUT) /usr/bin/
