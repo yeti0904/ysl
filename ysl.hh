@@ -326,7 +326,8 @@ namespace YSL {
 					fprintf(stderr, "backtrace:\n");
 					for (size_t i = 0; i < calls.size(); ++i) {
 						fprintf(
-							stderr, "#%lli: %s\n", (long long int) i,
+							stderr, "#%lli (At %i): %s\n", (long long int) i,
+							(int) calls[i]->first,
 							calls[i]->second.c_str()
 						);
 					}

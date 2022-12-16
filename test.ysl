@@ -1,0 +1,7 @@
+label:
+	input
+	var i c return
+	size i
+	var i f return
+	println $i
+	goto *label
