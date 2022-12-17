@@ -1,0 +1,13 @@
+goto *main
+
+myfunc:
+	local var1
+	var var1 = 5
+	return $var1
+
+main:
+	gosub *myfunc
+	var ret f return
+	println $ret
+	println $var1
+	# above line should error

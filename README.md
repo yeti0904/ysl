@@ -251,3 +251,8 @@ prints out where it was called + a backtrace and exits
 
 ## sqrt
 takes in 1 integer argument and computes the square root
+
+## local
+takes in any amount of arguments, which are variable names
+
+when the function returns then these variables are reset to what they were before the function was called

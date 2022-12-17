@@ -8,15 +8,18 @@ std::vector <int> STD::Print(const std::vector <std::string>& args, Environment&
 	}
 	return {};
 }
+
 std::vector <int> STD::PrintLn(const std::vector <std::string>& args, Environment& env) {
 	Print(args, env);
 	puts("");
 	return {};
 }
+
 std::vector <int> STD::Exit(const std::vector <std::string>&, Environment&) {
 	exit(0);
 	return {};
 }
+
 std::vector <int> STD::Run(const std::vector <std::string>&, Environment& env) {
 	env.fromProgram = true;
 	for (env.lineAt = env.program.begin(); env.lineAt != env.program.end();) {
@@ -30,6 +33,7 @@ std::vector <int> STD::Run(const std::vector <std::string>&, Environment& env) {
 	env.fromProgram = false;
 	return {};
 }
+
 std::vector <int> STD::Goto(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "Goto: needs 1 argument");
 	env.Assert(Util::IsInteger(args[0]), "Goto: argument must be integer");
@@ -46,6 +50,7 @@ std::vector <int> STD::Goto(const std::vector <std::string>& args, Environment& 
 	exit(1);
 	return {};
 }
+
 std::vector <int> STD::GotoIf(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "GotoIf: needs 1 argument");
 
@@ -54,10 +59,12 @@ std::vector <int> STD::GotoIf(const std::vector <std::string>& args, Environment
 	}
 	return {};
 }
+
 std::vector <int> STD::GoSub(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() >= 1, "GoSub: Needs at least 1 argument");
 
 	env.calls.push_back(env.lineAt);
+	env.locals.push_back({});
 
 	for (size_t i = 1; i < args.size(); ++i) {
 		if (Util::IsInteger(args[i])) {
@@ -74,11 +81,13 @@ std::vector <int> STD::GoSub(const std::vector <std::string>& args, Environment&
 	
 	return Goto({args[0]}, env);
 }
+
 std::vector <int> STD::GoSubIf(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() >= 1, "GoSubIf: Needs at least 1 argument");
 
 	if (!env.returnValues.empty() && (env.returnValues.back()[0] != 0)) {
 		env.calls.push_back(env.lineAt);
+		env.locals.push_back({});
 	}
 
 	for (size_t i = 1; i < args.size(); ++i) {
@@ -96,6 +105,7 @@ std::vector <int> STD::GoSubIf(const std::vector <std::string>& args, Environmen
 	
 	return GotoIf({args[0]}, env);
 }
+
 std::vector <int> STD::Wait(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "Wait: needs 1 argument");
 	env.Assert(Util::IsInteger(args[0]), "Wait: argument must be integer");
@@ -103,11 +113,13 @@ std::vector <int> STD::Wait(const std::vector <std::string>& args, Environment& 
 	std::this_thread::sleep_for(std::chrono::milliseconds(stol(args[0])));
 	return {};
 }
+
 std::vector <int> STD::Cmp(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 2, "Cmp: needs 2 arguments");
 
 	return {args[0] == args[1]? 1 : 0};
 }
+
 std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& env) {
 	if ((args.size() < 3) && !((args.size() > 1) && (args[1] == "p"))) {
 		env.Assert(false, "Var: needs at least 3 arguments");
@@ -283,6 +295,7 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 
 	return {};
 }
+
 std::vector <int> STD::Load(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "Load: needs 1 argument");
 
@@ -298,14 +311,17 @@ std::vector <int> STD::Load(const std::vector <std::string>& args, Environment& 
 	fhnd.close();
 	return {};
 }
+
 std::vector <int> STD::Size(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "Size: needs 1 argument");
 
 	return {(int) env.variables[args[0]].size()};
 }
+
 std::vector <int> STD::Getch(const std::vector <std::string>&, Environment&) {
 	return {getchar()};
 }
+
 std::vector <int> STD::Input(const std::vector <std::string>&, Environment&) {
 	std::string input;
 	std::getline(std::cin, input, '\n');
@@ -317,6 +333,7 @@ std::vector <int> STD::Input(const std::vector <std::string>&, Environment&) {
 
 	return ret;
 }
+
 std::vector <int> STD::Putch(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "Putch: needs 1 argument");
 	env.Assert(Util::IsInteger(args[0]), "Putch: requires integer argument");
@@ -324,6 +341,7 @@ std::vector <int> STD::Putch(const std::vector <std::string>& args, Environment&
 	putchar(stoi(args[0]));
 	return {};
 }
+
 std::vector <int> STD::SetSize(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 2, "SetSize: needs 2 arguments");
 
@@ -331,8 +349,10 @@ std::vector <int> STD::SetSize(const std::vector <std::string>& args, Environmen
 	arr.resize(stoi(args[1]));
 	return {};
 }
+
 std::vector <int> STD::Return(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(!env.calls.empty(), "Return: nowhere to return to");
+	env.Assert(!env.locals.empty(), "Return: missing locals (this is a bug");
 
 	if (args.size() < 1) {
 		
@@ -346,19 +366,29 @@ std::vector <int> STD::Return(const std::vector <std::string>& args, Environment
 
 	env.lineAt    = env.calls.back();
 	env.calls.pop_back();
+
+	// restore locals
+	for (auto& local : env.locals.back()) {
+		env.variables[local.name] = local.oldValue;
+	}
+	env.locals.pop_back();
+	
 	return {};
 }
+
 std::vector <int> STD::Debug(const std::vector <std::string>&, Environment& env) {
 	env.yslDebug = !env.yslDebug;
 	puts(std::to_string(env.yslDebug).c_str());
 	return {};
 }
+
 std::vector <int> STD::Swap(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 2, "Swap: needs 2 arguments");
 	
 	std::swap(env.variables[args[0]], env.variables[args[1]]);
 	return {};
 }
+
 std::vector <int> STD::Gt(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 2, "Gt: needs at least 2 arguments");
 	env.Assert(
@@ -370,6 +400,7 @@ std::vector <int> STD::Gt(const std::vector <std::string>& args, Environment& en
 		(stoi(args[0]) > stoi(args[1]))? 1 : 0
 	};
 }
+
 std::vector <int> STD::Lt(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 2, "Gt: needs 2 arguments");
 	env.Assert(
@@ -381,6 +412,7 @@ std::vector <int> STD::Lt(const std::vector <std::string>& args, Environment& en
 		(stoi(args[0]) < stoi(args[1]))? 1 : 0
 	};
 }
+
 std::vector <int> STD::Pow(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 2, "Pow: needs 2 arguments");
 	env.Assert(
@@ -390,6 +422,7 @@ std::vector <int> STD::Pow(const std::vector <std::string>& args, Environment& e
 
 	return {(int) pow((double) stoi(args[0]), (double) stoi(args[1]))};
 }
+
 std::vector <int> STD::StringArray(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() >= 2, "StringArray: Needs at least 2 arguments");
 
@@ -477,6 +510,7 @@ std::vector <int> STD::StringArray(const std::vector <std::string>& args, Enviro
 
 	return {};
 }
+
 std::vector <int> STD::Split(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() >= 2, "Split: Needs at least 2 arguments");
 
@@ -492,6 +526,7 @@ std::vector <int> STD::Split(const std::vector <std::string>& args, Environment&
 
 	return Util::StringVectorToIntVector(splitted);
 }
+
 std::vector <int> STD::Not(const std::vector <std::string>& args, Environment& env) {
 	if (args.empty()) {
 		auto ret = env.returnValues.back();
@@ -507,6 +542,7 @@ std::vector <int> STD::Not(const std::vector <std::string>& args, Environment& e
 		return std::vector <int>{stoi(args[0]) == 0? 1 : 0};
 	}
 }
+
 std::vector <int> STD::And(const std::vector <std::string>& args, Environment& env) {
 	if (args.empty()) {
 		env.Assert(
@@ -531,6 +567,7 @@ std::vector <int> STD::And(const std::vector <std::string>& args, Environment& e
 		return std::vector <int>{(stoi(args[0]) != 0) && (stoi(args[1]) != 0)};
 	}
 }
+
 std::vector <int> STD::Or(const std::vector <std::string>& args, Environment& env) {
 	if (args.empty()) {
 		env.Assert(
@@ -555,11 +592,13 @@ std::vector <int> STD::Or(const std::vector <std::string>& args, Environment& en
 		return std::vector <int>{(stoi(args[0]) != 0) || (stoi(args[1]) != 0)};
 	}
 }
+
 std::vector <int> STD::IsNum(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "IsNum: Needs 1 argument");
 
 	return std::vector <int>{Util::IsInteger(args[0])? 1 : 0};
 }
+
 std::vector <int> STD::Atoi(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(!args.empty(), "Atoi: Needs 1 argument");
 	env.Assert(
@@ -568,12 +607,14 @@ std::vector <int> STD::Atoi(const std::vector <std::string>& args, Environment& 
 
 	return std::vector <int>{stoi(args[0])};
 }
+
 std::vector <int> STD::Itoa(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(!args.empty(), "Itoa: needs 1 argument");
 	env.Assert(Util::IsInteger(args[0]), "Itoa: needs integer arguments");
 
 	return Util::StringToIntVector(args[0]);
 }
+
 std::vector <int> STD::LoadEnd(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "LoadEnd: needs 1 argument");
 
@@ -595,13 +636,24 @@ std::vector <int> STD::LoadEnd(const std::vector <std::string>& args, Environmen
 	fhnd.close();
 	return {};
 }
+
 std::vector <int> STD::Error(const std::vector <std::string>&, Environment& env) {
 	env.ExitError();
 	return {};
 }
+
 std::vector <int> STD::Sqrt(const std::vector <std::string>& args, Environment& env) {
 	env.Assert(args.size() == 1, "Sqrt: Requires 1 argument");
 	env.Assert(Util::IsInteger(args[0]), "Sqrt: Requires integer argument");
 
 	return {(int) round(sqrt((double) stoi(args[0])))};
+}
+
+std::vector <int> STD::Local(const std::vector <std::string>& args, Environment& env) {
+	puts("hi");
+	for (auto& arg : args) {
+		env.locals.back().push_back({arg, env.variables[arg]});
+	}
+
+	return {};
 }

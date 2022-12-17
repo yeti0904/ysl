@@ -1,7 +1,7 @@
 #ifndef YSL_EXTENSION_REGEX_HH
 #define YSL_EXTENSION_REGEX_HH
 
-#include "../ysl.hh"
+#include "../environment.hh"
 #include <regex>
 
 namespace YSL {
@@ -36,8 +36,8 @@ namespace YSL {
 					std::vector <int>{1} : std::vector <int>{0};
 			}
 
-			YSL::Extension BuildExtension() {
-				YSL::Extension ext;
+			Extension BuildExtension() {
+				Extension ext;
 				
 				ext.name               = "regex";
 				ext.functions["valid"] = Valid;

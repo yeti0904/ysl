@@ -1,7 +1,7 @@
 #ifndef YSL_EXTENSION_YSL_HH
 #define YSL_EXTENSION_YSL_HH
 
-#include "../ysl.hh"
+#include "../environment.hh"
 
 namespace YSL {
 	namespace Extensions {
@@ -17,8 +17,8 @@ namespace YSL {
 			env.returnValues.push_back(arr);
 			return {};
 		}
-		YSL::Extension BuildExtension() {
-			YSL::Extension ext;
+		Extension BuildExtension() {
+			Extension ext;
 
 			ext.name                     = "ysl";
 			ext.functions["return_push"] = ReturnPush;

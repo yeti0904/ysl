@@ -1,7 +1,8 @@
 #ifndef YSL_EXTENSION_SYSTEM_HH
 #define YSL_EXTENSION_SYSTEM_HH
 
-#include "../ysl.hh"
+#include "../environment.hh"
+#include "../util.hh"
 #include <stdlib.h>
 
 namespace YSL {
@@ -19,7 +20,7 @@ namespace YSL {
 				char* res = getenv(args[0].c_str());
 
 				return res == nullptr?
-					std::vector <int>{} : YSL::Util::StringToIntVector(args[0]);
+					std::vector <int>{} : Util::StringToIntVector(args[0]);
 			}
 			std::vector <int> SetEnv(const std::vector <std::string>& args, Environment& env) {
 				env.Assert(args.size() == 2, "System.SetEnv: Needs 2 arguments");
@@ -36,8 +37,8 @@ namespace YSL {
 				return {};
 			}
 
-			YSL::Extension BuildExtension() {
-				YSL::Extension ext;
+			Extension BuildExtension() {
+				Extension ext;
 				
 				ext.name                  = "system";
 				ext.functions["command"]  = Command;

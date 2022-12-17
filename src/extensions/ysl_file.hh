@@ -2,7 +2,7 @@
 #define YSL_EXTENSION_FILE_HH
 
 #include <fstream>
-#include "../ysl.hh"
+#include "../environment.hh"
 
 namespace YSL {
 	namespace Extensions {
@@ -52,8 +52,8 @@ namespace YSL {
 				return {};
 			}
 
-			YSL::Extension BuildExtension() {
-				YSL::Extension ext;
+			Extension BuildExtension() {
+				Extension ext;
 
 				ext.name               = "file";
 				ext.functions["read"]  = Read;

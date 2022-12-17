@@ -41,6 +41,7 @@ Environment::Environment():
 	builtins["load_end"]     = STD::LoadEnd;
 	builtins["error"]        = STD::Error;
 	builtins["sqrt"]         = STD::Sqrt;
+	builtins["local"]        = STD::Local;
 
 	#ifdef YSL_PLATFORM_WINDOWS
 		variables["__platform"] = {1};
@@ -218,7 +219,7 @@ void Environment::Interpret(std::string code) {
 		
 		if (builtins[parts[0]] == nullptr) {
 			fprintf(stderr, "No such function: %s\n", parts[0].c_str());
-			return;
+			ExitError();
 		}
 		auto args = AddVariables(
 			std::vector <std::string> (parts.begin() + 1, parts.end())

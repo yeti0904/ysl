@@ -42,6 +42,7 @@ namespace STD {
 	YSL_FUNCTION(LoadEnd);
 	YSL_FUNCTION(Error);
 	YSL_FUNCTION(Sqrt);
+	YSL_FUNCTION(Local);
 }
 
 #endif

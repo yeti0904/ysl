@@ -12,6 +12,11 @@ class Extension {
 		std::map <std::string, Function> functions;
 };
 
+struct LocalEntry {
+	std::string       name;
+	std::vector <int> oldValue;
+};
+
 class Environment {
 	public:
 		std::map <size_t, std::string>            program;
@@ -23,6 +28,7 @@ class Environment {
 		std::vector <std::vector <int>>           passes;
 		bool                                      yslDebug;
 		bool                                      fromProgram; // running from program map
+		std::vector <std::vector <LocalEntry>>    locals;
 
 		std::vector <std::map <size_t, std::string>::iterator> calls;
 

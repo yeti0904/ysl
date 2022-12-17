@@ -14,7 +14,7 @@
 #endif
 
 int main(int argc, char** argv) {
-	YSL::Environment env;
+	Environment env;
 
 	env.LoadExtension(YSL::Extensions::File::BuildExtension());
 	env.LoadExtension(YSL::Extensions::System::BuildExtension());
