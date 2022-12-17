@@ -31,7 +31,7 @@ CXXFLAGS += \
 	-Wextra \
 	-Werror \
 	-pedantic \
-	-ggdb
+	-ggdb -fms-extensions
 
 CXXLIBS +=
 

@@ -30,4 +30,6 @@
 	#define YSL_PLATFORM_UNKNOWN
 #endif
 
+#define YSL_API __attribute__((visibility("default")))
+
 #endif

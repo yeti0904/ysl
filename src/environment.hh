@@ -17,7 +17,7 @@ struct LocalEntry {
 	std::vector <int> oldValue;
 };
 
-class Environment {
+class YSL_API Environment {
 	public:
 		std::map <size_t, std::string>            program;
 		std::map <std::string, Function>          builtins;
