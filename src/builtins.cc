@@ -650,7 +650,6 @@ std::vector <int> STD::Sqrt(const std::vector <std::string>& args, Environment& 
 }
 
 std::vector <int> STD::Local(const std::vector <std::string>& args, Environment& env) {
-	puts("hi");
 	for (auto& arg : args) {
 		env.locals.back().push_back({arg, env.variables[arg]});
 	}
