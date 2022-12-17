@@ -107,7 +107,7 @@ namespace YSL {
 
 				return {(int) readRet};
 			}
-			std::vector <int> Write(const std::vector <std::string>& args, Environment& env) {
+			std::vector <int> Write(const std::vector <std::string>&, Environment&) {
 				// TODO
 				return {};
 			}

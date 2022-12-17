@@ -3,13 +3,46 @@ ifndef CXX
 CXX = g++
 endif
 
-VER = $(shell git log -1 --pretty=format:"\"%H\"")
+CCACHE := $(shell command -v ccache 2> /dev/null)
+ifndef CXX
+CCACHE = ""
+endif
 
-SRC = interpreter.cc
-OUT = ysl
+# files
+SRC   = ${wildcard src/*.cc}
+DEPS += ${wildcard src/*.hh}
+OBJ   = ${addsuffix .o,${subst src/,bin/,${basename ${SRC}}}}
 
-build:
-	$(CXX) $(SRC) -DYSL_VERSION='$(VER)' -o $(OUT) -g
+APP = ysl
+
+# compiler related
+CXXVER = c++17
+CXXFLAGS = \
+	-O0 \
+	-std=${CXXVER} \
+	-Wall \
+	-Wextra \
+	-Werror \
+	-pedantic \
+	-ggdb
+
+# rules
+compile: ./bin ${OBJ} ${SRC}
+	${CCACHE} ${CXX} -o ${APP} ${OBJ}
+
+./bin:
+	mkdir -p bin
+
+bin/%.o: src/%.cc
+	${CCACHE} ${CXX} -c $< ${CXXFLAGS} ${CXXLIBS} -o $@
+
+clean:
+	rm bin/*.o $(APP)
 
 install:
-	cp $(OUT) /usr/bin/
+	cp $(APP) /usr/bin/
+
+all:
+	@echo compile
+	@echo clean
+	@echo install

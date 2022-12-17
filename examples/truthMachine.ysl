@@ -1,0 +1,11 @@
+input
+var in c return
+cmp !in 0
+goto_if *end
+
+loop:
+	println !in
+	goto *loop
+
+end:
+	exit
