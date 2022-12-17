@@ -1,0 +1,2 @@
+so.load "./test.so"
+so.call "./test.so" "Testing" "hello warld" "loololol"

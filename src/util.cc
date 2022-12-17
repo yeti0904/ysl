@@ -91,6 +91,8 @@ std::vector <char*> Util::StringVectorToCharpVector(std::vector <std::string> ve
 		ret.push_back(strdup(str.c_str()));
 	}
 
+	ret.push_back(nullptr);
+
 	return ret;
 }
 
@@ -125,6 +127,7 @@ std::vector <std::string> Util::SplitString(
     			}
     			case '\\': {
     				reading += '\\';
+    				break;
     			}
     			default: {
     				reading += std::string("\\") + str[i];

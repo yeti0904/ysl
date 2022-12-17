@@ -17,9 +17,14 @@ OBJ   = ${addsuffix .o,${subst src/,bin/,${basename ${SRC}}}}
 
 APP = ysl
 
+ifeq ($(type), lib)
+	APP = ysl.so
+	CXXLIBS = -fPIC
+endif
+
 # compiler related
 CXXVER = c++17
-CXXFLAGS = \
+CXXFLAGS += \
 	-O0 \
 	-std=${CXXVER} \
 	-Wall \
@@ -28,15 +33,17 @@ CXXFLAGS = \
 	-pedantic \
 	-ggdb
 
+CXXLIBS +=
+
 # rules
 compile: ./bin ${OBJ} ${SRC}
-	${CCACHE} ${CXX} -o ${APP} ${OBJ}
+	${CCACHE} ${CXX} -o ${APP} ${OBJ} ${CXXLIBS}
 
 ./bin:
 	mkdir -p bin
 
 bin/%.o: src/%.cc
-	${CCACHE} ${CXX} -c $< ${CXXFLAGS} ${CXXLIBS} -DYSL_VERSION='$(VER)' -o $@
+	${CCACHE} ${CXX} -c $< ${CXXFLAGS} -DYSL_VERSION='$(VER)' -o $@
 
 clean:
 	rm bin/*.o $(APP)
