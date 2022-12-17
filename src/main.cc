@@ -27,13 +27,23 @@ int main(int argc, char** argv) {
 	if (argc > 1) {
 		if (std::string(argv[1]) == "--version") {
 			printf("Version: %s\n", YSL_VERSION);
+			return 0;
 		}
-	
-		env.Interpret(std::string("load ") + argv[1]);
-		env.Interpret("run");
+		else if (std::string(argv[1]) == "--help") {
+			puts(
+				"YSL help\n"
+				"--version : show what commit this version was built on\n"
+				"--help    : show this menu"
+			);
+			return 0;
+		}
+		else {
+			env.Interpret(std::string("load ") + argv[1]);
+			env.Interpret("run");
+		}
 	}
 	else {
-		puts("YSL example interpreter");
+		puts("YSL repl");
 		while (true) {
 			std::string input;
 			fputs("> ", stdout);

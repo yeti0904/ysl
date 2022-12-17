@@ -8,6 +8,8 @@ ifndef CXX
 CCACHE = ""
 endif
 
+VER = $(shell git log -1 --pretty=format:"\"%H\"")
+
 # files
 SRC   = ${wildcard src/*.cc}
 DEPS += ${wildcard src/*.hh}
@@ -34,7 +36,7 @@ compile: ./bin ${OBJ} ${SRC}
 	mkdir -p bin
 
 bin/%.o: src/%.cc
-	${CCACHE} ${CXX} -c $< ${CXXFLAGS} ${CXXLIBS} -o $@
+	${CCACHE} ${CXX} -c $< ${CXXFLAGS} ${CXXLIBS} -DYSL_VERSION='$(VER)' -o $@
 
 clean:
 	rm bin/*.o $(APP)
