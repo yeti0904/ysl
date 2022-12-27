@@ -156,6 +156,9 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 			env.Assert(
 				Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
 			);
+			env.Assert(
+				!env.variables[args[0]].empty(), "Var: empty variable " + args[0]
+			);
 		
 			env.variables[args[0]][0] += stoi(args[2]);
 			break;
@@ -163,6 +166,9 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 		case '-': {
 			env.Assert(
 				Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+			);
+			env.Assert(
+				!env.variables[args[0]].empty(), "Var: empty variable " + args[0]
 			);
 		
 			env.variables[args[0]][0] -= stoi(args[2]);
@@ -172,6 +178,9 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 			env.Assert(
 				Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
 			);
+			env.Assert(
+				!env.variables[args[0]].empty(), "Var: empty variable " + args[0]
+			);
 		
 			env.variables[args[0]][0] *= stoi(args[2]);
 			break;
@@ -179,6 +188,9 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 		case '/': {
 			env.Assert(
 				Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+			);
+			env.Assert(
+				!env.variables[args[0]].empty(), "Var: empty variable " + args[0]
 			);
 		
 			env.variables[args[0]][0] /= stoi(args[2]);
@@ -188,6 +200,9 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 			env.Assert(
 				Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
 			);
+			env.Assert(
+				!env.variables[args[0]].empty(), "Var: empty variable " + args[0]
+			);
 		
 			env.variables[args[0]][0] %= stoi(args[2]);
 			break;
@@ -195,6 +210,9 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 		case '^': {
 			env.Assert(
 				Util::IsInteger(args[2]), "Var: argument 3 must be an integer"
+			);
+			env.Assert(
+				!env.variables[args[0]].empty(), "Var: empty variable " + args[0]
 			);
 
 			env.variables[args[0]][0] = (int) pow(
