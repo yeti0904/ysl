@@ -465,7 +465,8 @@ std::vector <int> STD::StringArray(const std::vector <std::string>& args, Enviro
 
 			env.Assert(
 				(index >= 0) && ((size_t) index < array.size()),
-				"StringArray: Index out of range for array of size " +
+				"StringArray: Index " + std::to_string(index) +
+				"out of range for array of size " +
 				std::to_string(array.size())
 			);
 

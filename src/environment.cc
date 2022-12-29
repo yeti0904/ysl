@@ -206,7 +206,18 @@ void Environment::Interpret(std::string code) {
 	if (parts.empty()) {
 		return;
 	}
-	parts[0] = AddVariables(std::vector <std::string>{parts[0]})[0];
+
+	{
+		auto expanded = Util::SplitString(
+			AddVariables(std::vector <std::string>{parts[0]})[0], ' ', -1
+		);
+		auto newParts = expanded;
+		parts.erase(parts.begin());
+		for (auto& part : parts) {
+			newParts.push_back(part);
+		}
+		parts = newParts;
+	}
 	
 	if (Util::IsInteger(parts[0])) {
 		if (parts.size() == 1) {
