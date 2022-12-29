@@ -5,6 +5,7 @@
 #include "extensions/ysl_system.hh"
 #include "extensions/ysl_regex.hh"
 #include "extensions/ysl_so.hh"
+#include "extensions/ysl_ysl.hh"
 
 #ifndef YSL_NO_GRAPHICS
 	#include "extensions/ysl_gfx.hh"
@@ -32,6 +33,7 @@ int main(int argc, char** argv) {
 	#ifndef YSL_PLATFORM_WINDOWS
 		env.LoadExtension(YSL::Extensions::Posix::BuildExtension());
 	#endif
+	env.LoadExtension(YSL::Extensions::Ysl::BuildExtension());
 
 	if (argc > 1) {
 		if (std::string(argv[1]) == "--version") {
