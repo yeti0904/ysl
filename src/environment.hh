@@ -8,8 +8,9 @@ typedef std::vector <int> (*Function)(const std::vector <std::string>&, Environm
 
 class Extension {
 	public:
-		std::string                      name;
-		std::map <std::string, Function> functions;
+		std::string                               name;
+		std::map <std::string, Function>          functions;
+		std::map <std::string, std::vector <int>> variables;
 };
 
 struct LocalEntry {
@@ -19,16 +20,16 @@ struct LocalEntry {
 
 class YSL_API Environment {
 	public:
-		std::map <size_t, std::string>            program;
-		std::map <std::string, Function>          builtins;
-		std::map <size_t, std::string>::iterator  lineAt;
-		bool                                      increment;
-		std::map <std::string, std::vector <int>> variables;
-		std::vector <std::vector <int>>           returnValues;
-		std::vector <std::vector <int>>           passes;
-		bool                                      yslDebug;
-		bool                                      fromProgram; // running from program map
-		std::vector <std::vector <LocalEntry>>    locals;
+		std::map <size_t, std::string>               program;
+		std::map <std::string, Function>             builtins;
+		std::map <size_t, std::string>::iterator     lineAt;
+		bool                                         increment;
+		std::map <std::string, std::vector <int>>    variables;
+		std::vector <std::vector <int>>              returnValues;
+		std::vector <std::vector <int>>              passes;
+		bool                                         yslDebug;
+		bool                                         fromProgram; // running from program map
+		std::vector <std::vector <LocalEntry>>       locals;
 
 		std::vector <std::map <size_t, std::string>::iterator> calls;
 

@@ -1,0 +1,30 @@
+input
+var height c return
+atoi !height
+var height f return
+var height - 1
+input
+var width c return
+atoi !width
+var width f return
+var x = 0
+var y = 0
+loop:
+	print "O"
+	var x + 1
+	lt $x $width
+	not
+	goto_if *.ny
+	goto *loop
+	.ny:
+		lt $y $height
+		not
+		goto_if *bye
+		var x = 0
+		var y + 1
+		println
+		goto *loop
+
+bye:
+	println
+	exit

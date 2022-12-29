@@ -6,6 +6,10 @@
 #include "extensions/ysl_regex.hh"
 #include "extensions/ysl_so.hh"
 
+#ifndef YSL_NO_GRAPHICS
+	#include "extensions/ysl_gfx.hh"
+#endif
+
 #ifndef YSL_PLATFORM_WINDOWS
 	#include "extensions/ysl_posix.hh"
 #endif
@@ -21,6 +25,9 @@ int main(int argc, char** argv) {
 	env.LoadExtension(YSL::Extensions::System::BuildExtension());
 	env.LoadExtension(YSL::Extensions::Regex::BuildExtension());
 	env.LoadExtension(YSL::Extensions::So::BuildExtension());
+	#ifndef YSL_NO_GRAPHICS
+		env.LoadExtension(YSL::Extensions::Gfx::BuildExtension());
+	#endif
 
 	#ifndef YSL_PLATFORM_WINDOWS
 		env.LoadExtension(YSL::Extensions::Posix::BuildExtension());

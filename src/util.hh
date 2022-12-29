@@ -13,6 +13,9 @@ namespace Util {
 	std::vector <std::string> IntVectorToStringVector(std::vector <int> vec);
 	std::vector <char*>       StringVectorToCharpVector(std::vector <std::string> vec);
 	std::vector <std::string> SplitString(std::string str, char splitter, ssize_t maxSplit);
+	bool                      ValidYSLMatrix(std::vector <int>& vec);
+
+	std::vector <std::vector <int>> IntVectorTo2dIntVector(std::vector <int> vec);
 	
 }
 

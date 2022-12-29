@@ -13,6 +13,7 @@ VER = $(shell git log -1 --pretty=format:"\"%H\"")
 # files
 SRC   = ${wildcard src/*.cc}
 DEPS += ${wildcard src/*.hh}
+DEPS += ${wildcard src/extensions/*}
 OBJ   = ${addsuffix .o,${subst src/,bin/,${basename ${SRC}}}}
 
 APP = ysl
@@ -25,15 +26,20 @@ endif
 # compiler related
 CXXVER = c++17
 CXXFLAGS += \
-	-O0 \
 	-std=${CXXVER} \
 	-Wall \
 	-Wextra \
 	-Werror \
 	-pedantic \
-	-ggdb -fms-extensions
+	-fms-extensions
 
-CXXLIBS +=
+ifeq ($(mode), release)
+	CXXFLAGS += -Ofast
+else
+	CXXFLAGS += -O0 -ggdb
+endif
+
+CXXLIBS += -lraylib
 
 # rules
 compile: ./bin ${OBJ} ${SRC}
@@ -42,7 +48,7 @@ compile: ./bin ${OBJ} ${SRC}
 ./bin:
 	mkdir -p bin
 
-bin/%.o: src/%.cc
+bin/%.o: src/%.cc ${DEPS}
 	${CCACHE} ${CXX} -c $< ${CXXFLAGS} -DYSL_VERSION='$(VER)' -o $@
 
 clean:

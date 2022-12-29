@@ -166,3 +166,29 @@ std::vector <std::string> Util::SplitString(
 
     return ret;
 }
+
+bool Util::ValidYSLMatrix(std::vector <int>& vec) {
+	if (vec.size() < 2) {
+		return false; // no metadata
+	}
+	if ((int) vec.size() != 2 + (vec[0] * vec[1])) {
+		return false;
+	}
+	return true;
+}
+
+std::vector <std::vector <int>> Util::IntVectorTo2dIntVector(std::vector <int> vec) {
+	std::vector <std::vector <int>> ret;
+	int width  = vec[0];
+	int height = vec[1];
+
+	for (int y = 0, i = 0; y < height; ++y) {
+		ret.push_back({});
+		for (int x = 0; (i < (int) vec.size() - 2) && (x < width); ++x, ++i) {
+			ret.back().push_back(vec[i]);
+		}
+		++ i;
+	}
+
+	return ret;
+}

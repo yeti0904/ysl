@@ -100,7 +100,11 @@ void Environment::SetVariable(std::string name, std::vector <int> value) {
 void Environment::LoadExtension(const Extension& ext) {
 	for (auto it = ext.functions.begin(); it != ext.functions.end(); ++it) {
 		std::string functionName = ext.name + "." + it->first;
-		builtins[functionName] = it->second;
+		builtins[functionName]   = it->second;
+	}
+	for (auto it = ext.variables.begin(); it != ext.variables.end(); ++it) {
+		std::string varName = ext.name + "." + it->first;
+		variables[varName]  = it->second;
 	}
 }
 

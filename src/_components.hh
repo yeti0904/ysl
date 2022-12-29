@@ -2,7 +2,7 @@
 #define YSL__COMPONENTS_HH
 
 // C standard libraries
-#include <math.h>
+#include <cmath>
 #include <ctype.h>
 #include <string.h>
 

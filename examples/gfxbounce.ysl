@@ -1,0 +1,41 @@
+var posX = 225
+var posY = 0
+var velX = 5
+var velY = 0
+var boxS = 50
+
+gfx.init 500 500 "YSL gfxbounce"
+
+loop:
+	gfx.window_open
+	not
+	goto_if *.bye
+
+	# physics
+	var posY + $velY
+	var posX + $velX
+	var velY + 1
+	gt $posY 450
+	goto_if *.bounce
+	lt $posX 0
+	goto_if *.bounceH
+	gt $posX 450
+	goto_if *.bounceH
+
+	# render
+	gfx.clear $gfx.black
+	gfx.rectangle $posX $posY $boxS $boxS $gfx.green
+	gfx.draw
+
+	goto *loop
+
+	.bounce:
+		var velY = -30
+		goto *loop
+
+	.bounceH:
+		var velX * -1
+		goto *loop
+		
+	.bye:
+		exit
