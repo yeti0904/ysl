@@ -43,6 +43,7 @@ namespace STD {
 	YSL_FUNCTION(Error);
 	YSL_FUNCTION(Sqrt);
 	YSL_FUNCTION(Local);
+	YSL_FUNCTION(Matrix);
 }
 
 #endif

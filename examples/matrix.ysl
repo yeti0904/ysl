@@ -1,0 +1,8 @@
+matrix mymatrix c 5 5
+matrix mymatrix s 2 3 50
+matrix mymatrix g 2 3
+var val f return
+println $val
+matrix mymatrix g 3 2
+var val f return
+println $val

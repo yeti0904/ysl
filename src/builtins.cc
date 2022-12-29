@@ -675,3 +675,73 @@ std::vector <int> STD::Local(const std::vector <std::string>& args, Environment&
 
 	return {};
 }
+
+std::vector <int> STD::Matrix(const std::vector <std::string>& args, Environment& env) {
+	env.Assert(args.size() >= 2, "Matrix: Operation/variable name not given");
+
+	auto& variable = env.variables[args[0]];
+
+	if (args[1][0] != 'c') {
+		env.Assert(
+			(variable.size() >= 2) &&
+			(variable.size() == (size_t) (variable[0] * variable[1]) + 2),
+			"Matrix: Invalid matrix"
+		);
+	}
+
+	switch (args[1][0]) {
+		case 'c': {
+			env.Assert(args.size() == 4, "Matrix: C requires 2 extra arguments");
+			env.Assert(
+				Util::IsInteger(args[2]) && Util::IsInteger(args[3]),
+				"Matrix: C requires 2 integer arguments"
+			);
+			std::vector <int> matrix;
+			matrix.resize(2 + (stoi(args[2]) * stoi(args[3])));
+			matrix[0] = stoi(args[2]);
+			matrix[1] = stoi(args[3]);
+
+			env.variables[args[0]] = matrix;
+			break;
+		}
+		case 'g': {
+			env.Assert(args.size() == 4, "Matrix: G requires 2 extra arguments");
+			env.Assert(
+				Util::IsInteger(args[2]) && Util::IsInteger(args[3]),
+				"Matrix: G requires 2 integer arguments"
+			);
+			env.Assert(
+				(stoi(args[2]) < variable[0]) && (stoi(args[3]) < variable[1]),
+				"Matrix: Indexes out of bounds"
+			);
+
+			return {variable[
+				 ((stoi(args[2]) * variable[0]) + stoi(args[3])) + 2
+			]};
+		}
+		case 's': {
+			auto& variable = env.variables[args[0]];
+			env.Assert(args.size() == 5, "Matrix: S requires 3 extra arguments");
+			env.Assert(
+				Util::IsInteger(args[2]) && Util::IsInteger(args[3]) &&
+				Util::IsInteger(args[4]),
+				"Matrix: S requires 2 integer arguments"
+			);
+			env.Assert(
+				(stoi(args[2]) < variable[0]) && (stoi(args[3]) < variable[1]),
+				"Matrix: Indexes out of bounds"
+			);
+
+			env.variables[args[0]][
+				((stoi(args[2]) * variable[0]) + stoi(args[3])) + 2
+			] = stoi(args[4]);
+			break;
+		}
+		default: {
+			fprintf(stderr, "Matrix: Unknown operation %c\n", args[1][0]);
+			env.ExitError();
+		}
+	}
+
+	return {};
+}

@@ -42,6 +42,7 @@ Environment::Environment():
 	builtins["error"]        = STD::Error;
 	builtins["sqrt"]         = STD::Sqrt;
 	builtins["local"]        = STD::Local;
+	builtins["matrix"]       = STD::Matrix;
 
 	#ifdef YSL_PLATFORM_WINDOWS
 		variables["__platform"] = {1};

@@ -256,3 +256,25 @@ takes in 1 integer argument and computes the square root
 takes in any amount of arguments, which are variable names
 
 when the function returns then these variables are reset to what they were before the function was called
+
+## matrix
+syntax:
+```
+matrix varname (operation) (parameters)
+```
+
+__Operations:__
+### c
+2 extra parameters: width and height
+
+creates a matrix in the variable
+
+### g
+2 extra parameters: x and y index
+
+returns the integer in that position of the matrix
+
+### s
+3 extra parameters: x and y index and value
+
+sets the value at that position to the value

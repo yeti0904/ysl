@@ -1,0 +1,58 @@
+var currentCalcLine = *end
+var currentCalcLine + 1
+
+println "With variables x and y, modify the Y value to make the point on the graph"
+println "When you are done, type return"
+
+inputLoop:
+	input
+	var in c return
+	ysl.write_line $currentCalcLine !in
+	var currentCalcLine + 1
+	cmp !in "return"
+	not
+	goto_if *inputLoop
+
+println "Displaying graph"
+
+display:
+	gfx.init 500 500 "Graph"
+	.loop:
+		gfx.clear $gfx.white
+
+		var verticalLineX = 0
+		var horizontalLineY = 0
+		.verticalLines:
+			gfx.line $verticalLineX 0 $verticalLineX 500 $gfx.cyan
+			var verticalLineX + 10
+			lt $verticalLineX 500
+			goto_if *.verticalLines
+		.horizontalLines:
+			gfx.line 0 $horizontalLineY 500 $horizontalLineY $gfx.cyan
+			var horizontalLineY + 10
+			lt $horizontalLineY 500
+			goto_if *.horizontalLines
+
+		var oldX = 0
+		var oldY = 0
+		var x = 0
+		var y = 0
+		var realY = 0
+		.loopX:
+			var oldX = $x
+			var oldY = $y
+			gosub *end
+			var realY = 500
+			var realY - $y
+			var realOldY = 500
+			var realOldY - $oldY
+			gfx.line $x $realY $oldX $realOldY $gfx.blue
+			var x + 1
+			lt $x 500
+			goto_if *.loopX
+			
+		gfx.draw
+		goto *.loop
+
+exit
+end:
