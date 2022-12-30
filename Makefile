@@ -20,7 +20,7 @@ APP = ysl
 
 ifeq ($(type), lib)
 	APP = libysl.so
-	CXXLIBS = -fPIC
+	CXXLIBS = -shared -fPIC
 	CXXFLAGS += -DYSL_ISLIB
 endif
 
@@ -44,7 +44,7 @@ CXXLIBS += -lraylib
 
 # rules
 compile: ./bin ${OBJ} ${SRC}
-	${CCACHE} ${CXX} -o ${APP} ${OBJ} ${CXXLIBS}
+	${CCACHE} ${CXX} ${CXXLIBS} -o ${APP} ${OBJ}
 
 ./bin:
 	mkdir -p bin
