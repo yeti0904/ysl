@@ -19,8 +19,9 @@ OBJ   = ${addsuffix .o,${subst src/,bin/,${basename ${SRC}}}}
 APP = ysl
 
 ifeq ($(type), lib)
-	APP = ysl.so
+	APP = libysl.so
 	CXXLIBS = -fPIC
+	CXXFLAGS += -DYSL_ISLIB
 endif
 
 # compiler related

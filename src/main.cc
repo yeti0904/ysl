@@ -6,7 +6,6 @@
 #include "extensions/ysl_regex.hh"
 #include "extensions/ysl_so.hh"
 #include "extensions/ysl_ysl.hh"
-
 #ifndef YSL_NO_GRAPHICS
 	#include "extensions/ysl_gfx.hh"
 #endif
@@ -19,6 +18,7 @@
 	#define YSL_VERSION "Unknown"
 #endif
 
+#ifndef YSL_ISLIB
 int main(int argc, char** argv) {
 	Environment env;
 
@@ -66,3 +66,4 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
+#endif

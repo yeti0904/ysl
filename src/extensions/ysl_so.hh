@@ -28,7 +28,7 @@ namespace YSL {
 	namespace Extensions {
 		namespace So {
 			typedef void (*LoadedFunction)(
-				const std::vector <std::string>& args, Environment& env
+				const std::vector <std::string>& args, Environment* env
 			);
 			static std::vector <LoadedLibrary> libraries;
 			std::vector <int> Load(const std::vector <std::string>& args, Environment& env) {
@@ -69,7 +69,7 @@ namespace YSL {
 						auto funcArgs = args;
 						funcArgs.erase(funcArgs.begin(), funcArgs.begin() + 2);
 
-						func(funcArgs, env);
+						func(funcArgs, &env);
 						return {};
 					}
 				}
