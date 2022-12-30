@@ -20,8 +20,10 @@ APP = ysl
 
 ifeq ($(type), lib)
 	APP = libysl.so
-	CXXLIBS = -shared -fPIC
-	CXXFLAGS += -DYSL_ISLIB
+	CXXLIBS = -shared
+	CXXFLAGS += -fPIC -DYSL_ISLIB -DYSL_NO_GRAPHICS
+else
+	CXXLIBS += -lraylib
 endif
 
 # compiler related
@@ -39,8 +41,6 @@ ifeq ($(mode), release)
 else
 	CXXFLAGS += -O0 -ggdb
 endif
-
-CXXLIBS += -lraylib
 
 # rules
 compile: ./bin ${OBJ} ${SRC}
