@@ -236,6 +236,7 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 				env.variables[args[2]];
 
 			if (args[2] == "return") {
+				env.Assert(!env.returnValues.empty(), "Var: return stack empty");
 				env.returnValues.pop_back();
 			}
 
@@ -256,6 +257,7 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 				env.returnValues.back() : env.variables[args[2]];
 
 			if (args[2] == "return") {
+				env.Assert(!env.returnValues.empty(), "Var: return stack empty");
 				env.returnValues.pop_back();
 			}
 			
@@ -466,7 +468,7 @@ std::vector <int> STD::StringArray(const std::vector <std::string>& args, Enviro
 			env.Assert(
 				(index >= 0) && ((size_t) index < array.size()),
 				"StringArray: Index " + std::to_string(index) +
-				"out of range for array of size " +
+				" out of range for array of size " +
 				std::to_string(array.size())
 			);
 
@@ -530,20 +532,10 @@ std::vector <int> STD::StringArray(const std::vector <std::string>& args, Enviro
 	return {};
 }
 
-std::vector <int> STD::Split(const std::vector <std::string>& args, Environment& env) {
-	env.Assert(args.size() >= 2, "Split: Needs at least 2 arguments");
-
-	std::vector <std::string> splitted;
-	if (args.size() >= 2) {
-		env.Assert(Util::IsInteger(args[2]), "Split: max split must be integer");
-
-		splitted = Util::SplitString(args[0], args[1][0], stoi(args[2]));
-	}
-	else {
-		splitted = Util::SplitString(args[0], args[1][0], -1);
-	}
-
-	return Util::StringVectorToIntVector(splitted);
+std::vector <int> STD::Split(const std::vector <std::string>&, Environment&) {
+	fprintf(stderr, "YSL: Split is no longer supported\n");
+	exit(1);
+	return {};
 }
 
 std::vector <int> STD::Not(const std::vector <std::string>& args, Environment& env) {

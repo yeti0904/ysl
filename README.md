@@ -215,7 +215,7 @@ println !return
 takes in a variable name, index and it removes the element at index from the array
 
 ## split
-takes in 2 arguments, a string and 1 character to act as the splitter, an optional third argument will be the maximum limit of splits
+takes in 2 arguments, a string and 1 character to act as the splitter
 
 returns a string array
 
