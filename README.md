@@ -4,17 +4,6 @@
 
 Yeti's Simple Language
 
-## Example of usage
-```
-#include "ysl.hh"
-
-int main() {
-	YSL::Environment env;
-
-	env.Interpret("print hello world");
-}
-```
-
 ## syntax
 \# for comments
 
