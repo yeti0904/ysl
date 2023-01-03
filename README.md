@@ -4,6 +4,13 @@
 
 Yeti's Simple Language
 
+## build options
+### type=lib
+compiles YSL as a library
+
+### graphics=off
+disables the gfx library so raylib is not required for decompilation
+
 ## syntax
 \# for comments
 
