@@ -452,8 +452,8 @@ std::vector <int> STD::StringArray(const std::vector <std::string>& args, Enviro
 			for (size_t i = 1; i < args.size(); ++i) {
 				newArray.push_back(args[i]);
 			}
-			return Util::StringVectorToIntVector(newArray);
-			break;
+			env.returnValues.push_back(Util::StringVectorToIntVector(newArray));
+			return {};
 		}
 		case 'g': {
 			env.Assert(
@@ -472,8 +472,8 @@ std::vector <int> STD::StringArray(const std::vector <std::string>& args, Enviro
 				std::to_string(array.size())
 			);
 
-			return Util::StringToIntVector(array[index]);
-			break;
+			env.returnvalues.push_back(Util::StringToIntVector(array[index]));
+			return {};
 		}
 		case 'l': {
 			auto array = Util::IntVectorToStringVector(env.variables[args[1]]);
