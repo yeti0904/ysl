@@ -743,3 +743,8 @@ std::vector <int> STD::Matrix(const std::vector <std::string>& args, Environment
 
 	return {};
 }
+
+std::vector <int> STD::String(const std::vector <std::string>& args, Environment& env) {
+	env.Assert(args.size() == 1, "String: Requires 1 argument");
+	return Util::StringToIntVector(args[0]);
+}

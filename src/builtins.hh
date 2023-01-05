@@ -44,6 +44,7 @@ namespace STD {
 	YSL_FUNCTION(Sqrt);
 	YSL_FUNCTION(Local);
 	YSL_FUNCTION(Matrix);
+	YSL_FUNCTION(String);
 }
 
 #endif

@@ -43,6 +43,7 @@ Environment::Environment():
 	builtins["sqrt"]         = STD::Sqrt;
 	builtins["local"]        = STD::Local;
 	builtins["matrix"]       = STD::Matrix;
+	builtins["string"]       = STD::String;
 
 	#ifdef YSL_PLATFORM_WINDOWS
 		variables["__platform"] = {1};

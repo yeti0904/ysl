@@ -282,3 +282,8 @@ returns the integer in that position of the matrix
 3 extra parameters: x and y index and value
 
 sets the value at that position to the value
+
+## string
+takes 1 argument and returns that argument as a string
+
+this is useful because `var` assignment can sometimes turn a string into an integer when you don't want it to
