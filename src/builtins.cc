@@ -307,6 +307,12 @@ std::vector <int> STD::Var(const std::vector <std::string>& args, Environment& e
 			arr[stol(args[2])] = stoi(args[3]);
 			break;
 		}
+		case 'j': {
+			env.variables[args[0]] = Util::StringToIntVector(
+				Util::IntVectorToString(env.variables[args[0]]) + args[3]
+			);
+			break;
+		}
 		default: {
 			fprintf(stderr, "Var: unknown operation %c\n", args[1][0]);
 			env.ExitError();
@@ -472,7 +478,7 @@ std::vector <int> STD::StringArray(const std::vector <std::string>& args, Enviro
 				std::to_string(array.size())
 			);
 
-			env.returnvalues.push_back(Util::StringToIntVector(array[index]));
+			env.returnValues.push_back(Util::StringToIntVector(array[index]));
 			return {};
 		}
 		case 'l': {

@@ -9,6 +9,7 @@ namespace Util {
 	std::string               StringReplace(std::string str, char from, char to);
 	std::string               TrimString(std::string str);
 	std::vector <int>         StringToIntVector(std::string str);
+	std::string               IntVectorToString(std::vector <int> vec);
 	std::vector <int>         StringVectorToIntVector(std::vector <std::string> vec);
 	std::vector <std::string> IntVectorToStringVector(std::vector <int> vec);
 	std::vector <char*>       StringVectorToCharpVector(std::vector <std::string> vec);

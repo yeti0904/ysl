@@ -50,6 +50,17 @@ std::vector <int> Util::StringToIntVector(std::string str) {
 
 	return ret;
 }
+
+std::string Util::IntVectorToString(std::vector <int> vec) {
+	std::string ret;
+
+	for (auto& i : vec) {
+		ret += (char) i;
+	}
+
+	return ret;
+}
+
 std::vector <int> Util::StringVectorToIntVector(std::vector <std::string> vec) {
 	std::vector <int> ret;
 

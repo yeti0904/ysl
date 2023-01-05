@@ -126,6 +126,14 @@ var array s 0 2
 # array is now 2 2 3 4 5
 ```
 
+the j operation joins 2 strings together, example
+```
+var str = "hello, "
+var str j "world"
+println !str
+# hello, world
+```
+
 ## load
 loads the contents of a file into program memory, takes 1 argument which is filename
 
