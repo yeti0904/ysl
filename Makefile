@@ -23,7 +23,7 @@ ifeq ($(type), lib)
 	CXXSHARED = -shared
 	CXXFLAGS += -fPIC -DYSL_ISLIB -DYSL_NO_GRAPHICS
 else ifeq ($(graphics), off)
-	CXXFLAGS += DYSL_NO_GRAPHICS
+	CXXFLAGS += -DYSL_NO_GRAPHICS
 else
 	CXXLIBS += -lraylib -lpthread -lGL -lm -ldl -lrt -lX11
 endif
