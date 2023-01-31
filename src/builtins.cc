@@ -753,3 +753,64 @@ std::vector <int> STD::String(PARAM_AE) {
 	env.Assert(args.size() == 1, "String: Requires 1 argument");
 	return Util::StringToIntVector(args[0]);
 }
+
+std::vector <int> STD::Lshift(PARAM_AE) {
+	env.Assert(args.size() == 2, "Lshift: Requires 2 arguments");
+	env.Assert(
+		Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+		"Lshift: Parameters must be integers"
+	);
+
+	return {stoi(args[0]) << stoi(args[1])};
+}
+
+std::vector <int> STD::Rshift(PARAM_AE) {
+	env.Assert(args.size() == 2, "Rshift: Requires 2 arguments");
+	env.Assert(
+		Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+		"Rshift: Parameters must be integers"
+	);
+
+	return {stoi(args[0]) >> stoi(args[1])};
+}
+
+std::vector <int> STD::BitAnd(PARAM_AE) {
+	env.Assert(args.size() == 2, "BitAnd: Requires 2 arguments");
+	env.Assert(
+		Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+		"BitAnd: Parameters must be integers"
+	);
+
+	return {stoi(args[0]) & stoi(args[1])};
+}
+
+std::vector <int> STD::BitOr(PARAM_AE) {
+	env.Assert(args.size() == 2, "BitOr: Requires 2 arguments");
+	env.Assert(
+		Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+		"BitOr: Parameters must be integers"
+	);
+
+	return {stoi(args[0]) | stoi(args[1])};
+}
+
+std::vector <int> STD::BitNot(PARAM_AE) {
+	env.Assert(args.size() == 1, "BitNot: Requires 1 argument");
+	env.Assert(
+		Util::IsInteger(args[0]),
+		"BitNot: Parameter must be integers"
+	);
+
+	return {~stoi(args[0])};
+}
+
+std::vector <int> STD::BitXor(PARAM_AE) {
+	env.Assert(args.size() == 2, "BitXor: Requires 2 arguments");
+	env.Assert(
+		Util::IsInteger(args[0]) && Util::IsInteger(args[1]),
+		"BitXor: Parameters must be integers"
+	);
+
+	return {stoi(args[0]) ^ stoi(args[1])};
+}
+

@@ -73,15 +73,14 @@ std::vector <int> Util::StringVectorToIntVector(std::vector <std::string> vec) {
 
 	return ret;
 }
+
 std::vector <std::string> Util::IntVectorToStringVector(std::vector <int> vec) {
-	size_t                    index = 0;
 	std::string               reading;
 	std::vector <std::string> ret;
 
 	for (auto& ch : vec) {
 		switch (ch) {
 			case '\0': {
-				++ index;
 				ret.push_back(reading);
 				reading = "";
 				break;
@@ -95,6 +94,7 @@ std::vector <std::string> Util::IntVectorToStringVector(std::vector <int> vec) {
 
 	return ret;
 }
+
 std::vector <char*> Util::StringVectorToCharpVector(std::vector <std::string> vec) {
 	std::vector <char*> ret;
 

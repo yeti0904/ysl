@@ -44,6 +44,12 @@ Environment::Environment():
 	builtins["local"]        = STD::Local;
 	builtins["matrix"]       = STD::Matrix;
 	builtins["string"]       = STD::String;
+	builtins["l_shift"]      = STD::Lshift;
+	builtins["r_shift"]      = STD::Rshift;
+	builtins["bit_and"]      = STD::BitAnd;
+	builtins["bit_or"]       = STD::BitOr;
+	builtins["bit_not"]      = STD::BitNot;
+	builtins["bit_xor"]      = STD::BitXor;
 
 	#ifdef YSL_PLATFORM_WINDOWS
 		variables["__platform"] = {1};

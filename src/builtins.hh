@@ -45,6 +45,12 @@ namespace STD {
 	YSL_FUNCTION(Local);
 	YSL_FUNCTION(Matrix);
 	YSL_FUNCTION(String);
+	YSL_FUNCTION(Lshift);
+	YSL_FUNCTION(Rshift);
+	YSL_FUNCTION(BitAnd);
+	YSL_FUNCTION(BitOr);
+	YSL_FUNCTION(BitNot);
+	YSL_FUNCTION(BitXor);
 }
 
 #endif
