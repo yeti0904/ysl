@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 		env.LoadExtension(YSL::Extensions::Curl::BuildExtension());
 	#endif
 
-	#ifdef defined(YSL_PLATFORM_WINDOWS) || defined(YSL_PLATFORM_APPLE)
+	#if defined(YSL_PLATFORM_WINDOWS) || defined(YSL_PLATFORM_APPLE)
 	#else
 		env.LoadExtension(YSL::Extensions::Posix::BuildExtension());
 	#endif
