@@ -28,6 +28,12 @@ else
 	CXXLIBS += -lraylib -lpthread -lGL -lm -ldl -lrt -lX11
 endif
 
+ifneq ($(curl), off)
+	CXXLIBS += -lcurl
+else
+	CXXFLAGS += -DYSL_NO_CURL
+endif
+
 # compiler related
 CXXVER = c++17
 CXXFLAGS += \

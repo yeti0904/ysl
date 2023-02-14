@@ -9,8 +9,12 @@
 #ifndef YSL_NO_GRAPHICS
 	#include "extensions/ysl_gfx.hh"
 #endif
+#ifndef YSL_NO_CURL
+	#include "extensions/ysl_curl.hh"
+#endif
 
-#ifndef YSL_PLATFORM_WINDOWS
+#if defined(YSL_PLATFORM_WINDOWS) || defined(YSL_PLATFORM_APPLE)
+#else
 	#include "extensions/ysl_posix.hh"
 #endif
 
@@ -28,6 +32,9 @@ int main(int argc, char** argv) {
 	env.LoadExtension(YSL::Extensions::So::BuildExtension());
 	#ifndef YSL_NO_GRAPHICS
 		env.LoadExtension(YSL::Extensions::Gfx::BuildExtension());
+	#endif
+	#ifndef YSL_NO_CURL
+		env.LoadExtension(YSL::Extensions::Curl::BuildExtension());
 	#endif
 
 	#ifndef YSL_PLATFORM_WINDOWS
