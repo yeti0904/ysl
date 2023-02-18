@@ -25,7 +25,7 @@ ifeq ($(type), lib)
 else ifeq ($(graphics), off)
 	CXXFLAGS += -DYSL_NO_GRAPHICS
 else
-	CXXLIBS += -lraylib -lpthread -lGL -lm -ldl -lrt -lX11
+	CXXLIBS += -lraylib -lpthread -lGL -lm -lrt -lX11
 endif
 
 ifneq ($(curl), off)
@@ -33,6 +33,8 @@ ifneq ($(curl), off)
 else
 	CXXFLAGS += -DYSL_NO_CURL
 endif
+
+CXXLIBS += -ldl
 
 # compiler related
 CXXVER = c++17

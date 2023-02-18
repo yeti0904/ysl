@@ -66,7 +66,10 @@ int main(int argc, char** argv) {
 		while (true) {
 			std::string input;
 			fputs("> ", stdout);
-			std::getline(std::cin, input, '\n');
+			if (!std::getline(std::cin, input, '\n')) {
+			    puts("");
+			    return 0;
+			}
 
 			env.Interpret(input);
 		}

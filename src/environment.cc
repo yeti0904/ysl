@@ -109,7 +109,7 @@ void Environment::LoadExtension(const Extension& ext) {
 	for (auto it = ext.functions.begin(); it != ext.functions.end(); ++it) {
 		std::string functionName = ext.name + "." + it->first;
 		builtins[functionName]   = it->second;
-		printf("Loaded function %s\n", functionName.c_str());
+		//printf("Loaded function %s\n", functionName.c_str());
 	}
 	for (auto it = ext.variables.begin(); it != ext.variables.end(); ++it) {
 		std::string varName = ext.name + "." + it->first;
