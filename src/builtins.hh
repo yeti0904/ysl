@@ -51,6 +51,8 @@ namespace STD {
 	YSL_FUNCTION(BitOr);
 	YSL_FUNCTION(BitNot);
 	YSL_FUNCTION(BitXor);
+	YSL_FUNCTION(StartScope);
+	YSL_FUNCTION(EndScope);
 }
 
 #endif

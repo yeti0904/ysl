@@ -814,3 +814,22 @@ std::vector <int> STD::BitXor(PARAM_AE) {
 	return {stoi(args[0]) ^ stoi(args[1])};
 }
 
+std::vector <int> STD::StartScope(PARAM_AE) {
+	env.Assert(args.empty(), "StartScope: 0 arguments required");
+
+	env.locals.push_back({});
+
+	return {};
+}
+
+std::vector <int> STD::EndScope(PARAM_AE) {
+	env.Assert(args.empty(), "EndScope: 0 arguments required");
+
+	// restore locals
+	for (auto& local : env.locals.back()) {
+		env.variables[local.name] = local.oldValue;
+	}
+	env.locals.pop_back();
+
+	return {};
+}
