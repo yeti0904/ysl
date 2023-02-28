@@ -8,9 +8,6 @@ Yeti's Simple Language
 ### type=lib
 compiles YSL as a library
 
-### graphics=off
-disables the gfx library so raylib is not required for compilation
-
 ### curl=off
 disables the curl extension so libcurl is not required for compilation
 
