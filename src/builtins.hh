@@ -53,6 +53,7 @@ namespace STD {
 	YSL_FUNCTION(BitXor);
 	YSL_FUNCTION(StartScope);
 	YSL_FUNCTION(EndScope);
+	YSL_FUNCTION(Object);
 }
 
 #endif

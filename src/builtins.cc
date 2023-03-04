@@ -833,3 +833,11 @@ std::vector <int> STD::EndScope(PARAM_AE) {
 
 	return {};
 }
+
+std::vector <int> STD::Object(PARAM_AE) {
+	env.Assert(args.size() == 2, "Object: Requires 2 arguments");
+
+	std::string memberRef = args[0] + "." + args[1];
+
+	return Util::StringToIntVector(memberRef);
+}

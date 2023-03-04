@@ -52,6 +52,7 @@ Environment::Environment():
 	builtins["bit_xor"]      = STD::BitXor;
 	builtins["start_scope"]  = STD::StartScope;
 	builtins["end_scope"]    = STD::EndScope;
+	builtins["object"]       = STD::Object;
 
 	#ifdef YSL_PLATFORM_WINDOWS
 		variables["__platform"] = {1};

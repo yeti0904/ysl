@@ -1,0 +1,17 @@
+goto *main
+
+new_foo:
+	var ref p
+
+	object !ref bar
+
+	var barReference c return
+	var !barReference = "hello world"
+
+	return
+
+main:
+	var foo = 0
+	gosub *new_foo foo
+
+	println !foo.bar
